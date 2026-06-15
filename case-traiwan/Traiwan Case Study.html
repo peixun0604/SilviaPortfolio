@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traiwan × Silvia — 從介面設計到攝影方案</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a class="brand" href="../Silvia Yang - Portfolio.html">Silvia's portfolio</a>
+    <span class="proj-name">TRAIWAN ｜ UI/UX</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" data-screen-label="Hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid-deco"></div>
+  <div class="container">
+    <div class="hero-kicker" data-stage style="--sd:.05s">
+      <b>Traiwan × Silvia</b><span class="dot"></span><span>UI/UX 設計　·　產品延伸　·　服務設計</span>
+    </div>
+    <h1 class="hero-title" data-stage style="--sd:.15s">UI 升級了，<br><span class="hl">照片卻還是十年前的。</span></h1>
+    <p class="hero-sub" data-stage style="--sd:.30s">從介面設計到攝影方案，補足 SaaS 官網模版的最後一塊缺口。</p>
+    <div class="hero-meta" data-stage style="--sd:.44s">
+      <div class="meta-cell"><div class="k">Project</div><div class="v">UI/UX 設計 ／ 產品延伸 ／ 服務設計</div></div>
+      <div class="meta-cell"><div class="k">Role</div><div class="v">介面設計・用戶洞察・攝影方案提案與執行</div></div>
+      <div class="meta-cell"><div class="k">Timeline</div><div class="v">2023 – 2024</div></div>
+      <div class="meta-cell"><div class="k">Company</div><div class="v">Traiwan 創炎資訊</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- 01 BACKGROUND -->
+<section data-screen-label="01 Background">
+  <div class="container">
+    <span class="eyebrow">01 — Background</span>
+    <h2 class="sec-title">一個 4 週、不能動程式邏輯的官網優化任務。</h2>
+    <p class="sec-body">Traiwan 提供旅宿業「雲端管理」、「官方線上訂房」及「通路整合」SaaS 服務。我的任務是在不改動程式邏輯的前提下，於 4 週內優化官網模版的 UI 視覺與 UX，提升旅宿業主的上架誘因與旅客轉化率。</p>
+    <div class="chip-row">
+      <span class="chip"><b>4 週</b>交付時程</span>
+      <span class="chip"><b>不能動</b>程式邏輯</span>
+      <span class="chip"><b>資源有限</b>的新創限制</span>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSITION 01 → 02 -->
+<section class="sec-bridge" data-screen-label="UI 迭代成果">
+  <div class="bridge-glow"></div>
+  <div class="bridge-inner">
+    <span class="bridge-label">UI 迭代實際成果</span>
+    <div class="bridge-mock" id="bridgeMock">
+      <img src="assets/traiwan-mockup.png" alt="出來玩旅舍 官網 — 桌機與行動版 UI 迭代成果" />
+    </div>
+    <p class="bridge-line">介面煥然一新——而真正的關鍵，藏在下一個細節裡。</p>
+  </div>
+</section>
+
+<!-- 02 PROBLEM -->
+<section data-screen-label="02 Problem">
+  <div class="container">
+    <span class="eyebrow">02 — Problem</span>
+    <h2 class="sec-title">UI 優化之後，民宿官網還是看起來不對——<br><span class="ink-blue">問題不在設計，在照片。</span></h2>
+    <p class="sec-body">幫客戶調整官網配色時，業務會把民宿老闆提供的素材一起帶進來。就在那個當下，我親眼看到了問題：版型是新的，但照片是十年前拍的。昏黃的燈光、歪斜的構圖、低解析度的空間感——無論介面設計做得多好，這些照片都會把整體質感拉回原點。</p>
+
+    <!-- DRAG COMPARE SLIDER -->
+    <figure class="ba-compare-wrap fade-up">
+      <div class="ba-compare" id="baCompare" style="--pos:50%">
+        <img class="ba-img" src="assets/room-after.png" alt="專業攝影後的房間：明亮、構圖整齊">
+        <div class="ba-clip">
+          <img class="ba-img" src="assets/room-before.png" alt="升級前的房間照片：昏黃、雜亂">
+        </div>
+        <span class="ba-tag ba-tag-before">BEFORE</span>
+        <span class="ba-tag ba-tag-after">AFTER</span>
+        <div class="ba-handle" id="baHandle">
+          <span class="ba-knob">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/><polyline points="9 6 15 12 9 18" transform="translate(6,0)"/></svg>
+          </span>
+        </div>
+        <div class="ba-drag-hint"><span class="ar">←</span>拖曳比較<span class="ar">→</span></div>
+      </div>
+      <figcaption class="ba-cap">同一個房間：升級前 vs 專業攝影後</figcaption>
+    </figure>
+
+    <div class="callout">
+      <span class="callout-k">問題重新定義</span>
+      <p>這不是 UI 問題。這是<b>內容缺口</b>。好的版型，需要好的內容才能發揮效果。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 INSIGHT -->
+<section class="sec-insight" data-screen-label="03 Insight">
+  <div class="container">
+    <span class="eyebrow on-dark">03 — Insight</span>
+    <blockquote class="pull-quote fade-up">UI 是容器，<br><span class="hl-lime">內容才是說服力的來源。</span></blockquote>
+    <div class="insight-cols">
+      <p>旅宿業主選擇升級官網，是因為想吸引更多旅客。但如果官網上的照片無法呈現真實的空間氛圍，再好的版型也無法完成這件事。</p>
+      <p>設計能做的事有邊界。發現邊界在哪裡，然後補上——才是真正解決問題。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 SOLUTION -->
+<section data-screen-label="04 Solution">
+  <div class="container">
+    <span class="eyebrow">04 — Solution</span>
+    <h2 class="sec-title">從零建立一個攝影方案，補上那塊內容缺口。</h2>
+    <p class="sec-body">向 BD 提出攝影方案的想法，說明照片品質是目前影響轉化率的關鍵缺口。老闆決定執行，團隊一起推進。我從零開始建立這個服務：</p>
+
+    <div class="steps">
+      <div class="step fade-up">
+        <span class="step-n">01</span>
+        <div class="step-c"><h4>尋找合適的攝影師</h4><p>評估接案攝影師的風格與配合度，確認能穩定產出旅宿空間質感。</p></div>
+      </div>
+      <div class="step fade-up">
+        <span class="step-n">02</span>
+        <div class="step-c"><h4>談定合作條件</h4><p>與攝影師確認拍攝規格與交付標準，建立可複製的品質基準。</p></div>
+      </div>
+      <div class="step fade-up">
+        <span class="step-n">03</span>
+        <div class="step-c"><h4>制定兩端定價</h4><p>攝影師端的合作費用 ／ 民宿業主端的方案售價，讓服務能規模化運作。</p></div>
+      </div>
+      <div class="step fade-up">
+        <span class="step-n">04</span>
+        <div class="step-c"><h4>與團隊對齊執行</h4><p>對齊執行細節，確保每一次交付的服務品質一致。</p></div>
+      </div>
+    </div>
+
+    <figure class="artifact fade-up">
+      <img src="assets/marketing-sample.png" alt="實際交付的攝影方案行銷素材：before/after 對照與服務說明">
+      <figcaption>實際交付的行銷素材——把「照片品質」這個抽象問題，變成業主一眼就懂的提案。</figcaption>
+    </figure>
+
+    <div class="goal">
+      <span class="goal-k">目標</span>
+      <p>讓每一個升級版型的民宿業主，都能同步擁有匹配品質的視覺內容。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 05 RESULT -->
+<section data-screen-label="05 Result">
+  <div class="container">
+    <span class="eyebrow">05 — Result</span>
+    <h2 class="sec-title">沒有一個大數字，<br>但有一個更真實的連鎖反應。</h2>
+    <div class="chain">
+      <div class="chain-card fade-up">
+        <span class="chain-node"></span>
+        <h4>續約率提升</h4>
+        <p>民宿業主願意持續更新版型，官網不再是一次性升級。</p>
+      </div>
+      <div class="chain-arrow" aria-hidden="true">→</div>
+      <div class="chain-card fade-up">
+        <span class="chain-node"></span>
+        <h4>口碑流傳</h4>
+        <p>攝影方案在客戶之間互相推薦，成為自然擴散的招牌服務。</p>
+      </div>
+      <div class="chain-arrow" aria-hidden="true">→</div>
+      <div class="chain-card fade-up">
+        <span class="chain-node"></span>
+        <h4>服務延伸</h4>
+        <p>從「UI 升級工具」延伸為「品牌視覺整體解決方案」。</p>
+      </div>
+    </div>
+    <p class="result-punch fade-up">沒有一個大數字，但有一個更真實的結果：<br><span class="hl-lime">客戶開始把這個服務介紹給他們的朋友。</span></p>
+  </div>
+</section>
+
+<!-- 06 REFLECTION -->
+<section class="sec-reflect" data-screen-label="06 Reflection">
+  <div class="container">
+    <span class="eyebrow on-dark">06 — Reflection</span>
+    <h2 class="reflect-title fade-up">第一次完整經歷<br>「發現問題 → 定義解法 → 自己落地」。</h2>
+    <div class="reflect-body fade-up">
+      <p>設計師的工作是把介面做好。但如果只盯著介面，很容易錯過真正影響用戶體驗的那個變數。</p>
+      <p>發現「照片才是問題」不需要很厲害的分析能力——需要的是願意把眼睛從 Figma 上移開，看一看真實的使用情境。</p>
+      <p>從那個觀察出發，到提案、找攝影師、定價、執行，也是我開始理解 <b>PM 思維和設計師思維差在哪裡</b>的時刻。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CASE NAV -->
+<div class="container">
+  <div class="case-nav">
+    <a href="../Silvia Yang - Portfolio.html#projects">← 返回作品集</a>
+    <a href="../case-px/PX Case Study.html" style="text-align:right;"><span style="display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-2);margin-bottom:4px;">下一個專案</span>重新定義 TA、設計階段性低摩擦路徑 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="fi">Silvia's Info.</div>
+    <div class="fc">
+      <a href="mailto:sy.peix@gmail.com">sy.peix@gmail.com</a> · 0937 180 668<br>
+      © 2026 Silvia Yang — Portfolio
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

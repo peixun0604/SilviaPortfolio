@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>take! × Silvia — B2B Sales Kit 提案重設計</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="styles.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- META BAR -->
+<div class="meta-bar">
+  <div class="container">
+    <div class="meta-item"><span class="meta-label">專案類型</span><span class="meta-value">行銷策略 ／ 提案設計 ／ 跨職能執行</span></div>
+    <div class="meta-item"><span class="meta-label">角色</span><span class="meta-value">提案邏輯規劃・文案撰寫・視覺設計統籌</span></div>
+    <div class="meta-item"><span class="meta-label">時間</span><span class="meta-value">2023–2024</span></div>
+    <div class="meta-item"><span class="meta-label">公司</span><span class="meta-value">拿拿科技行銷 take!</span></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" data-screen-label="Hero">
+  <div class="container">
+    <div class="fade-up">
+      <span class="hero-tag">B2B Sales Kit 提案重設計</span>
+      <h1 class="hero-title">從痛點拆解到成交提案——<br>重新定義一份 B2B 提案的說服邏輯</h1>
+      <p class="hero-sub">這不只是一次改版，而是一次從觀察場景、定義問題到執行落地的完整 PM 思維實踐。</p>
+    </div>
+
+    <!-- HERO GRAPHIC: organic PM loop -->
+    <div class="hero-graphic anim fade-up">
+      <svg viewBox="0 0 720 360" role="img" aria-label="PM 思維閉環：觀察 → 定義 → 設計 → 驗證">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1.5 L8 5 L2 8.5" fill="none" stroke="var(--gray-3)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- drifting overlapping rings -->
+        <ellipse class="ring r1" cx="240" cy="190" rx="210" ry="96" transform="rotate(-16 240 190)"/>
+        <ellipse class="ring r2" cx="470" cy="180" rx="165" ry="120" transform="rotate(22 470 180)"/>
+        <ellipse class="ring r3" cx="382" cy="212" rx="252" ry="62" transform="rotate(6 382 212)"/>
+
+        <!-- organic connectors -->
+        <path class="flow-path" d="M150 244 C 196 182, 232 124, 292 112" marker-end="url(#arr)"/>
+        <path class="flow-path" d="M322 120 C 378 168, 398 232, 436 252" marker-end="url(#arr)"/>
+        <path class="flow-path" d="M468 252 C 542 242, 562 152, 600 126" marker-end="url(#arr)"/>
+
+        <!-- floating nodes (no boxes) -->
+        <g>
+          <circle class="flow-node-dot" cx="140" cy="232" r="3"/>
+          <text class="flow-node-label" x="140" y="252" font-size="17" text-anchor="middle">觀察</text>
+          <text class="flow-node-meta" x="140" y="272" font-size="10.5" text-anchor="middle">陪 BD 開會</text>
+          <text class="flow-node-meta" x="140" y="286" font-size="10.5" text-anchor="middle">當下追問品牌方</text>
+        </g>
+        <g>
+          <circle class="flow-node-dot" cx="308" cy="78" r="3"/>
+          <text class="flow-node-label" x="308" y="98" font-size="17" text-anchor="middle">定義</text>
+          <text class="flow-node-meta" x="308" y="118" font-size="10.5" text-anchor="middle">問題在邏輯</text>
+          <text class="flow-node-meta" x="308" y="132" font-size="10.5" text-anchor="middle">不在資訊</text>
+        </g>
+        <g>
+          <circle class="flow-node-dot" cx="450" cy="276" r="3"/>
+          <text class="flow-node-label" x="450" y="296" font-size="17" text-anchor="middle">設計</text>
+          <text class="flow-node-meta" x="450" y="316" font-size="10.5" text-anchor="middle">重構提案架構</text>
+          <text class="flow-node-meta" x="450" y="330" font-size="10.5" text-anchor="middle">五段說服邏輯</text>
+        </g>
+        <g class="flow-accent">
+          <circle class="flow-node-dot" cx="614" cy="92" r="3.5"/>
+          <text class="flow-node-label" x="614" y="112" font-size="18" text-anchor="middle">驗證</text>
+          <text class="flow-node-meta" x="614" y="132" font-size="10.5" text-anchor="middle">自己提案</text>
+          <text class="flow-node-meta" x="614" y="146" font-size="10.5" text-anchor="middle">CPA 54 元成交</text>
+        </g>
+      </svg>
+      <div class="hero-graphic-caption">從觀察到驗證，是一個完整的 PM 思維閉環</div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 PROBLEM -->
+<section class="section-problem" data-screen-label="01 Problem">
+  <div class="container">
+    <div class="problem-header fade-up">
+      <div class="section-label">01 — Problem</div>
+      <div class="title-stage">
+        <div class="giant-symbol symbol-question">?</div>
+        <h2 class="section-title">提案簡報資訊齊全，但品牌方<br>每次開會還是問一樣的問題。</h2>
+      </div>
+      <p class="problem-intro">加入 take! 後，因為上手快、手上又有所有 BD 客戶的結案報告，開始陪同 BD 出席實際提案會議。我沒有只做被交代的事——注意到品牌方反覆問同樣的問題，配合 BD 節奏，在適當時機當下直接追問，試圖理解表面問題背後的真實疑慮。</p>
+    </div>
+  </div>
+
+  <!-- 沉浸式對話帶 -->
+  <div class="immersive-chat-banner fade-up">
+    <div class="chat-banner-bg">
+      <image-slot id="problem-meeting" fit="cover" shape="rect" placeholder="拖入提案會議現場照片"></image-slot>
+      <div class="gradient-overlay"></div>
+    </div>
+    <div class="chat-stream-container">
+      <div class="chat-bubble bubble-left">這個方案適合我這檔活動嗎？</div>
+      <div class="chat-bubble bubble-right">這樣 KPI 真的會達標嗎？</div>
+      <div class="chat-bubble bubble-left">消費者要怎麼操作機台？執行起來會不會很複雜？</div>
+      <div class="chat-bubble bubble-right">這筆預算花下去值得嗎？跟之前做的有什麼不同？</div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="insight-statement-v2 fade-up">
+      <div class="title-stage">
+        <div class="giant-symbol symbol-exclamation">!</div>
+        <div class="insight-text">
+          <span class="prefix">觀察結論</span>
+          <p>這些問題，舊版簡報其實都有提到。<br>問題不在資訊缺失，而在<em>提案邏輯本身</em>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 INSIGHT -->
+<section data-screen-label="02 Insight">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">02 — Insight</div>
+      <h2 class="section-title">兩個世界，說著不同的語言。</h2>
+    </div>
+    <div class="insight-grid fade-up">
+      <div>
+        <div class="ig-header left">舊版邏輯（公司視角）</div>
+        <div class="ig-rows left">
+          <div class="ig-row"><span class="ig-sublabel">說的是</span>我們是誰</div>
+          <div class="ig-row"><span class="ig-sublabel">說的是</span>服務內容是什麼</div>
+          <div class="ig-row"><span class="ig-sublabel">說的是</span>合作案例列表</div>
+          <div class="ig-row"><span class="ig-sublabel">說的是</span>報價方案</div>
+        </div>
+      </div>
+      <div class="ig-arrow-col"><span class="ig-arrow">→</span></div>
+      <div>
+        <div class="ig-header right">品牌方真實心理</div>
+        <div class="ig-rows right">
+          <div class="ig-row"><span class="ig-sublabel">想的是</span>這跟我有什麼關係？</div>
+          <div class="ig-row"><span class="ig-sublabel">想的是</span>我現在面臨什麼困境？</div>
+          <div class="ig-row"><span class="ig-sublabel">想的是</span>我能得到什麼具體結果？</div>
+          <div class="ig-row"><span class="ig-sublabel">想的是</span>我值得花這筆預算嗎？</div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-note fade-up">
+      提案不先回應品牌方的真實心理狀態，後面說再多服務細節都是雜訊。
+    </div>
+  </div>
+</section>
+
+<!-- 03 SOLUTION -->
+<section data-screen-label="03 Solution">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">03 — Solution</div>
+      <h2 class="section-title">把提案邏輯從「介紹產品」<br>改為「建立雙向溝通」。</h2>
+    </div>
+    <div class="flow-steps fade-up">
+      <div class="flow-step">
+        <div class="step-num-wrap"><div class="step-num">1</div></div>
+        <div class="step-line-col"><div class="step-dot"></div><div class="step-line"></div></div>
+        <div class="step-body">
+          <span class="step-tag">品牌痛點導入</span>
+          <div class="step-title">讓品牌方在第一頁就感到被理解</div>
+          <div class="step-desc">以品牌方熟悉的市場困境開場，建立共鳴再進入服務說明。</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num-wrap"><div class="step-num">2</div></div>
+        <div class="step-line-col"><div class="step-dot"></div><div class="step-line"></div></div>
+        <div class="step-body">
+          <span class="step-tag">服務架構說明</span>
+          <div class="step-title">視覺化說明完整閉環</div>
+          <div class="step-desc">線下曝光 → 商品體驗 → 線上再行銷，三段式流程取代純文字描述。</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num-wrap"><div class="step-num">3</div></div>
+        <div class="step-line-col"><div class="step-dot"></div><div class="step-line"></div></div>
+        <div class="step-body">
+          <span class="step-tag">合作流程與操作</span>
+          <div class="step-title">降低對「執行複雜度」的疑慮</div>
+          <div class="step-desc">四步驟整合說明，讓品牌方在合作前就能預見執行路徑。</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num-wrap"><div class="step-num">4</div></div>
+        <div class="step-line-col"><div class="step-dot"></div><div class="step-line"></div></div>
+        <div class="step-body">
+          <span class="step-tag">成功案例與數據</span>
+          <div class="step-title">說明帶來了什麼可量化的結果</div>
+          <div class="step-desc">不只列出合作品牌，每個案例聚焦最有說服力的一個數字。</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num-wrap"><div class="step-num">5</div></div>
+        <div class="step-line-col"><div class="step-dot"></div><div class="step-line last"></div></div>
+        <div class="step-body">
+          <span class="step-tag">方案與報價</span>
+          <div class="step-title">讓品牌方在充分理解價值後再看到價格</div>
+          <div class="step-desc">將價格放在最後，減少「還沒理解就先看到數字」的決策阻力。</div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-goal fade-up">
+      <div class="goal-dot"></div>
+      <div class="goal-text">即使 BD 不在場，品牌方自己翻完也能理解、也想繼續談。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 BEFORE / AFTER -->
+<section class="section-ba" data-screen-label="04 Before/After">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">04 — Before / After</div>
+      <h2 class="section-title">從單方傳達，轉向品牌方心理的雙向溝通。</h2>
+    </div>
+
+    <!-- 上半部：3D 疊層金字塔 + 層級解說 -->
+    <div class="ba-framework-v2 fade-up">
+      <div class="pyramid-visual-container">
+        <div class="pyramid-layer layer-top"></div>
+        <div class="pyramid-layer layer-middle"></div>
+        <div class="pyramid-layer layer-bottom"></div>
+      </div>
+      <div class="pyramid-labels">
+        <div class="pyramid-label-item item-1">
+          <span class="label-title">消除阻力</span>
+          <span class="label-desc">一句話定位、實拍圖開場，開啟雙方對話</span>
+        </div>
+        <div class="pyramid-label-item item-2">
+          <span class="label-title">建立共鳴</span>
+          <span class="label-desc">先說痛點，再說服務——建立信任再推銷</span>
+        </div>
+        <div class="pyramid-label-item item-3">
+          <span class="label-title">傳遞價值</span>
+          <span class="label-desc">把服務包裝成解法而非功能列表，輔以影片說明</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 下半部：橫向簡報優化軌跡 -->
+  <div class="slide-flow-showcase fade-up">
+    <div class="slide-flow-inner">
+      <div class="slide-group">
+        <span class="slide-group-label old">Before</span>
+        <div class="slide-card original-slide">
+          <image-slot id="ba-slide-old" fit="cover" shape="rect" placeholder="舊版簡報"></image-slot>
+        </div>
+      </div>
+      <div class="slide-flow-arrow" aria-hidden="true">→</div>
+      <div class="slide-group">
+        <span class="slide-group-label new">After</span>
+        <div class="slide-row">
+          <div class="slide-card new-slide">
+            <image-slot id="ba-slide-1" fit="cover" shape="rect" placeholder="實拍圖開場"></image-slot>
+          </div>
+          <div class="slide-card new-slide">
+            <image-slot id="ba-slide-2" fit="cover" shape="rect" placeholder="一句話定位"></image-slot>
+          </div>
+          <div class="slide-card new-slide">
+            <image-slot id="ba-slide-3" fit="cover" shape="rect" placeholder="先說痛點"></image-slot>
+          </div>
+          <div class="slide-card new-slide">
+            <image-slot id="ba-slide-4" fit="cover" shape="rect" placeholder="影片說明"></image-slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 RESULT -->
+<section data-screen-label="05 Result">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">05 — Result</div>
+      <h2 class="section-title">市場給的答案。</h2>
+    </div>
+
+    <div class="dash-grid fade-up">
+      <div class="dash-card feature">
+        <span class="dash-eyebrow">高於原定價成交</span>
+        <div class="dash-metric"><span class="big">+20%</span></div>
+        <svg class="sparkline" viewBox="0 0 240 44" preserveAspectRatio="none" aria-hidden="true">
+          <path class="area" d="M0 40 L0 34 L40 35 L80 28 L120 27 L160 17 L200 14 L236 6 L236 44 L0 44 Z"/>
+          <path class="line" d="M0 34 L40 35 L80 28 L120 27 L160 17 L200 14 L236 6"/>
+          <circle cx="236" cy="6" r="3"/>
+        </svg>
+        <div class="dash-caption">品牌方願意付出溢價，是對提案邏輯最直接的市場驗證。</div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-eyebrow">原定價 ／ Baseline</span>
+        <div class="dash-metric"><span class="num">45</span><span class="unit">元 / CPA</span></div>
+        <span class="dash-tag">BD 團隊標準定價</span>
+      </div>
+      <div class="dash-card">
+        <span class="dash-eyebrow">成交價 ／ Closed</span>
+        <div class="dash-metric"><span class="num accent">54</span><span class="unit">元 / CPA</span></div>
+        <span class="dash-tag accent">Silvia 自主提案成交</span>
+      </div>
+    </div>
+
+    <div class="result-note fade-up">
+      <div class="result-note-dot"></div>
+      <div class="result-note-text">改版後的 Sales Kit 成為 BD 團隊對外提案的主力工具，涵蓋美妝保養、保健食品、快消品、科技產品等多個產業。</div>
+    </div>
+
+    <!-- LOGO WALL -->
+    <div class="logo-wall fade-up">
+      <span class="logo-wall-label">合作品牌</span>
+      <img src="assets/brand-logos.png" alt="合作品牌 Logo 牆：3M、誠品、AROMASE 艾瑪絲、蕾妮亞、毛起來、SHISEIDO、Pizza Hut、everrich 昇恆昌、白蘭氏、克補等"/>
+    </div>
+  </div>
+</section>
+
+<!-- 06 REFLECTION -->
+<section data-screen-label="06 Reflection">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">06 — Reflection</div>
+      <div class="reflection-pull">提案本身就是一個產品。</div>
+      <div class="reflection-body">
+        <p>它有使用者（品牌方決策者）、有使用情境（BD 不在場也能獨立運作）、有核心問題要解決（看不懂流程、不知道自己能得到什麼）、也有可衡量的成果（品牌是否願意繼續談）。</p>
+        <p>這是我第一次真正理解——PM 的核心能力不是管理任務，而是在複雜的利害關係中，找到最能推動事情前進的切入點。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE NAV -->
+<div class="container">
+  <div class="case-nav">
+    <a href="#">← 上一個專案</a>
+    <a href="#">下一個專案 →</a>
+  </div>
+</div>
+
+<!-- TWEAKS -->
+<div id="tweaks-root"></div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 70);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="image-slot.js"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
+</body>
+</html>

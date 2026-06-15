@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LINE OA Analytics</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:        #f0f2f5;
+  --sidebar:   #ffffff;
+  --card:      #ffffff;
+  --border:    #e8ecf2;
+  --border2:   #d1d9e6;
+
+  --blue:      #2563eb;
+  --blue-lt:   #eff4ff;
+  --blue-md:   #bfcffe;
+  --green:     #059669;
+  --green-lt:  #ecfdf5;
+  --green-md:  #a7f3d0;
+  --teal:      #0891b2;
+  --teal-lt:   #ecfeff;
+  --amber:     #d97706;
+  --amber-lt:  #fffbeb;
+  --red:       #dc2626;
+  --red-lt:    #fef2f2;
+
+  --t1:  #0f172a;
+  --t2:  #475569;
+  --t3:  #94a3b8;
+  --t4:  #cbd5e1;
+
+  --chart-blue:   #3b82f6;
+  --chart-green:  #10b981;
+  --chart-teal:   #06b6d4;
+  --chart-indigo: #6366f1;
+  --chart-amber:  #f59e0b;
+  --chart-rose:   #f43f5e;
+
+  --radius-sm: 8px;
+  --radius:    12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
+  --shadow:    0 4px 12px rgba(15,23,42,.08), 0 1px 3px rgba(15,23,42,.04);
+
+  --font: 'Plus Jakarta Sans', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--t1);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── OUTER SHELL ────────────────────────────────────────────── */
+.shell {
+  display: flex;
+  min-height: 100vh;
+  max-width: 1440px;
+  margin: 0 auto;
+  background: var(--bg);
+}
+
+/* ── SIDEBAR ────────────────────────────────────────────────── */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-mark {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, #06c755 0%, #059669 100%);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 800; color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(6,199,85,.35);
+}
+.logo-text {
+  font-size: 13px; font-weight: 700; color: var(--t1);
+  letter-spacing: -.2px;
+  line-height: 1.2;
+}
+.logo-sub { font-size: 10px; color: var(--t3); font-weight: 400; }
+
+.nav-section { padding: 16px 12px 8px; }
+.nav-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .8px;
+  text-transform: uppercase; color: var(--t3);
+  padding: 0 8px; margin-bottom: 4px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: var(--radius-sm);
+  cursor: pointer; color: var(--t2); font-size: 13px; font-weight: 500;
+  transition: all .15s; margin-bottom: 1px;
+  border: none; background: none; width: 100%; text-align: left;
+}
+.nav-item:hover { background: var(--bg); color: var(--t1); }
+.nav-item.active { background: var(--blue-lt); color: var(--blue); font-weight: 600; }
+.nav-item.active .nav-icon { color: var(--blue); }
+.nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--teal) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.avatar-info { flex: 1; min-width: 0; }
+.avatar-name { font-size: 12px; font-weight: 600; color: var(--t1); }
+.avatar-role { font-size: 10px; color: var(--t3); }
+
+/* ── MAIN ───────────────────────────────────────────────────── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* ── TOPBAR ─────────────────────────────────────────────────── */
+.topbar {
+  height: 56px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 24px; gap: 12px;
+  flex-shrink: 0;
+  position: sticky; top: 0; z-index: 10;
+}
+.topbar-title { font-size: 15px; font-weight: 700; color: var(--t1); flex: 1; }
+.topbar-title span { font-size: 12px; font-weight: 400; color: var(--t3); margin-left: 8px; }
+
+.search-box {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--bg); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 6px 12px;
+  font-size: 13px; color: var(--t3); cursor: text;
+}
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: var(--bg); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; transition: all .15s;
+}
+.icon-btn:hover { background: var(--blue-lt); border-color: var(--blue-md); }
+
+/* ── CONTENT ────────────────────────────────────────────────── */
+.content {
+  flex: 1; padding: 20px 24px; overflow-y: auto;
+}
+
+/* ── FILTER BAR ─────────────────────────────────────────────── */
+.filter-bar {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.filter-label { font-size: 12px; font-weight: 600; color: var(--t2); margin-right: 4px; }
+.filter-select {
+  padding: 6px 28px 6px 10px;
+  border: 1px solid var(--border2); border-radius: 7px;
+  font-family: var(--font); font-size: 12px; font-weight: 500;
+  color: var(--t1); background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center;
+  -webkit-appearance: none; cursor: pointer;
+  transition: border-color .15s;
+}
+.filter-select:focus { outline: none; border-color: var(--blue); }
+.filter-divider { width: 1px; height: 24px; background: var(--border2); margin: 0 4px; }
+.filter-apply {
+  margin-left: auto;
+  padding: 7px 16px; border-radius: 7px;
+  background: var(--blue); color: #fff;
+  font-family: var(--font); font-size: 12px; font-weight: 600;
+  border: none; cursor: pointer; transition: all .15s;
+  box-shadow: 0 1px 4px rgba(37,99,235,.3);
+}
+.filter-apply:hover { background: #1d4ed8; transform: translateY(-1px); }
+
+/* ── PAGE SECTIONS (tab routing) ──────────────────────────── */
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+/* ── SECTION HEADER ─────────────────────────────────────────── */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.section-title { font-size: 14px; font-weight: 700; color: var(--t1); }
+.section-sub   { font-size: 12px; color: var(--t3); margin-top: 1px; }
+.view-toggle {
+  display: flex; gap: 3px;
+  background: var(--bg); border: 1px solid var(--border2);
+  border-radius: 7px; padding: 3px;
+}
+.vt-btn {
+  padding: 4px 12px; border-radius: 5px; cursor: pointer;
+  font-size: 11px; font-weight: 600; color: var(--t3);
+  border: none; background: none; transition: all .15s;
+}
+.vt-btn.active { background: var(--card); color: var(--t1); box-shadow: var(--shadow-sm); }
+
+/* ── KPI CARDS ──────────────────────────────────────────────── */
+.kpi-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-bottom: 18px;
+}
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .2s, transform .2s;
+  position: relative; overflow: hidden;
+}
+.kpi-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+.kpi-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  background: var(--accent-color, var(--blue));
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+.kpi-card.green { --accent-color: var(--green); }
+.kpi-card.teal  { --accent-color: var(--teal); }
+
+.kpi-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.kpi-label  { font-size: 12px; font-weight: 600; color: var(--t2); letter-spacing: .1px; }
+.kpi-icon   { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.kpi-icon.blue  { background: var(--blue-lt); }
+.kpi-icon.green { background: var(--green-lt); }
+.kpi-icon.teal  { background: var(--teal-lt); }
+
+.kpi-value {
+  font-family: var(--mono); font-size: 30px; font-weight: 700;
+  color: var(--t1); line-height: 1; letter-spacing: -1px;
+  margin-bottom: 10px;
+}
+.kpi-value em { font-size: 16px; font-style: normal; opacity: .6; }
+
+.kpi-footer { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.kpi-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 20px;
+}
+.kpi-badge.up   { background: var(--green-lt); color: var(--green); }
+.kpi-badge.down { background: var(--red-lt);   color: var(--red); }
+.kpi-badge.neu  { background: var(--blue-lt);  color: var(--blue); }
+.kpi-desc { font-size: 11px; color: var(--t3); }
+
+/* ── CHART CARDS ────────────────────────────────────────────── */
+.grid-2   { display: grid; grid-template-columns: 1fr 1fr;    gap: 14px; margin-bottom: 18px; }
+.grid-3   { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+.grid-64  { display: grid; grid-template-columns: 1.6fr 1fr;  gap: 14px; margin-bottom: 18px; }
+.grid-46  { display: grid; grid-template-columns: 1fr 1.6fr;  gap: 14px; margin-bottom: 18px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .2s;
+}
+.card:hover { box-shadow: var(--shadow); }
+
+.card-head  { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.card-title { font-size: 13px; font-weight: 700; color: var(--t1); }
+.card-sub   { font-size: 11px; color: var(--t3); margin-top: 2px; }
+.chip {
+  font-size: 11px; padding: 3px 9px; border-radius: 20px;
+  background: var(--bg); color: var(--t3); font-family: var(--mono);
+  border: 1px solid var(--border2); white-space: nowrap;
+}
+
+/* ── LEGEND ─────────────────────────────────────────────────── */
+.legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; }
+.leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.leg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--t2); }
+
+/* ── SOURCE TAGS ────────────────────────────────────────────── */
+.src-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+  letter-spacing: .3px; text-transform: uppercase;
+}
+.src-tag.ec { background: #ecfdf5; color: #059669; }
+.src-tag.px { background: #eff6ff; color: #2563eb; }
+
+/* ── INSIGHT BANNER ──────────────────────────────────────────── */
+.insight {
+  background: linear-gradient(135deg, #ecfdf5 0%, #eff6ff 100%);
+  border: 1px solid #a7f3d0;
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 12px; color: #064e3b;
+  margin-bottom: 18px;
+  display: flex; gap: 10px; line-height: 1.7;
+}
+.insight strong { color: var(--green); }
+.insight .ins-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── SOURCE TOGGLE ─────────────────────────────────────────── */
+.src-toggle { display: flex; gap: 5px; }
+.src-btn {
+  padding: 5px 14px; border-radius: 20px; cursor: pointer;
+  font-size: 11px; font-weight: 600; letter-spacing: .2px;
+  border: 1.5px solid var(--border2); background: none; color: var(--t3);
+  transition: all .15s; font-family: var(--font);
+}
+.src-btn.ec.active { border-color: var(--green); background: var(--green-lt); color: var(--green); }
+.src-btn.px.active { border-color: var(--blue);  background: var(--blue-lt);  color: var(--blue); }
+
+.metric-pills { display: flex; gap: 3px; background: var(--bg); border: 1px solid var(--border2); border-radius: 7px; padding: 3px; }
+.metric-pill {
+  padding: 4px 12px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 600;
+  color: var(--t3); border: none; background: none; font-family: var(--font); transition: all .15s;
+}
+.metric-pill.active { background: var(--card); color: var(--t1); box-shadow: var(--shadow-sm); }
+
+/* ── TABLE ──────────────────────────────────────────────────── */
+.tbl-wrap { overflow-x: auto; margin-top: -4px; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead th {
+  text-align: left; padding: 7px 10px;
+  font-size: 10px; font-weight: 700; letter-spacing: .6px;
+  text-transform: uppercase; color: var(--t3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+thead th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+thead th:last-child  { border-radius: 0 var(--radius-sm) 0 0; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background .12s; }
+tbody tr:hover { background: #f8fafc; }
+tbody tr:last-child { border-bottom: none; }
+td { padding: 9px 10px; }
+.td-name { font-weight: 600; color: var(--t1); }
+.td-mono { font-family: var(--mono); font-size: 12px; color: var(--t2); }
+.td-rev  { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--t1); }
+.td-hi   { color: var(--green) !important; font-weight: 700 !important; }
+.type-pill {
+  font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px;
+  display: inline-block; letter-spacing: .2px;
+}
+.bar-wrap { display: flex; align-items: center; gap: 6px; }
+.mini-bg  { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; min-width: 36px; }
+.mini-fill { height: 100%; border-radius: 2px; }
+.month-dots { display: flex; gap: 2px; }
+.mdot {
+  font-size: 9px; padding: 1px 5px; border-radius: 3px;
+  background: var(--bg); color: var(--t4); font-family: var(--mono); border: 1px solid var(--border);
+}
+.mdot.on { background: var(--green-lt); color: var(--green); border-color: var(--green-md); }
+
+/* ── BINDING TYPE CARDS ──────────────────────────────────────── */
+.type-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.type-card {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px;
+  border-left: 3px solid var(--c, var(--border));
+  transition: border-color .15s, box-shadow .15s;
+}
+.type-card:hover { box-shadow: var(--shadow-sm); }
+.type-name { font-size: 12px; font-weight: 600; color: var(--t2); margin-bottom: 6px; }
+.type-rev  { font-family: var(--mono); font-size: 17px; font-weight: 700; }
+.type-meta { font-size: 11px; color: var(--t3); margin-top: 3px; }
+
+/* ── PLANNING CARDS ─────────────────────────────────────────── */
+.plan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+.plan-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
+  border-top: 3px solid var(--c, var(--border));
+}
+.plan-rank  { font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: var(--cc, var(--t3)); margin-bottom: 8px; }
+.plan-title { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 8px; }
+.plan-body  { font-size: 12px; color: var(--t2); line-height: 1.75; }
+.plan-body strong { color: var(--t1); }
+
+/* ── FOOTER NOTE ────────────────────────────────────────────── */
+.footer-note {
+  font-size: 11px; color: var(--t3); margin-top: 8px;
+  padding: 12px 16px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  line-height: 1.9;
+}
+
+/* ── SCROLLBAR ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--t4); }
+</style>
+</head>
+<body>
+<a href="PX Case Study.html" style="position:fixed;top:12px;right:16px;z-index:1000;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;background:rgba(31,31,31,.88);color:#fff;backdrop-filter:blur(8px);border-radius:99px;padding:9px 16px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;font-weight:600;text-decoration:none;box-shadow:0 6px 20px -8px rgba(0,0,0,.5);">← 返回案例</a>
+<div class="shell">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">L</div>
+    <div>
+      <div class="logo-text">LINE OA</div>
+      <div class="logo-sub">Analytics Dashboard</div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <button class="nav-item active" onclick="navTo('overview',this)">
+      <span class="nav-icon">📊</span> Performance Overview
+    </button>
+    <button class="nav-item" onclick="navTo('trend',this)">
+      <span class="nav-icon">📈</span> Monthly Trends
+    </button>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Channel Analysis</div>
+    <button class="nav-item" onclick="navTo('campaign',this)">
+      <span class="nav-icon">🎯</span> Campaign Metrics
+    </button>
+    <button class="nav-item" onclick="navTo('binding',this)">
+      <span class="nav-icon">🔗</span> Binding Analysis
+    </button>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Reports</div>
+    <button class="nav-item" onclick="navTo('overview',this)">
+      <span class="nav-icon">📄</span> Reports
+    </button>
+    <button class="nav-item" onclick="navTo('overview',this)">
+      <span class="nav-icon">⚙️</span> Settings
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="avatar">YC</div>
+    <div class="avatar-info">
+      <div class="avatar-name">Data Analyst</div>
+      <div class="avatar-role">LINE OA Team</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title">Performance Overview <span id="active-page-label">總覽</span></div>
+    <div class="search-box">🔍 &nbsp;Search campaigns…</div>
+    <div class="topbar-actions">
+      <div class="icon-btn" title="Notifications">🔔</div>
+      <div class="icon-btn" title="Export">↗️</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <span class="filter-label">Date Range</span>
+      <select class="filter-select" id="filter-date" onchange="applyFilter()">
+        <option>This Month (Apr '26)</option>
+        <option>Last Month (Mar '26)</option>
+        <option>Last 3 Months</option>
+        <option>Dec '25 – Apr '26 (All)</option>
+      </select>
+      <div class="filter-divider"></div>
+      <span class="filter-label">Channel</span>
+      <select class="filter-select" id="filter-channel" onchange="applyFilter()">
+        <option>All Channels</option>
+        <option>EC — 全電商 LINE OA</option>
+        <option>PX — 官方 LINE OA</option>
+      </select>
+      <div class="filter-divider"></div>
+      <span class="filter-label">Medium</span>
+      <select class="filter-select" id="filter-medium" onchange="applyFilter()">
+        <option>All Types</option>
+        <option>Post</option>
+        <option>Menu</option>
+        <option>VIP Campaign</option>
+        <option>Message</option>
+        <option>Live</option>
+      </select>
+      <button class="filter-apply" onclick="applyFilter()">Apply Filter</button>
+    </div>
+
+    <!-- ════════════════ PAGE: OVERVIEW ════════════════ -->
+    <div id="page-overview" class="page-section active">
+
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <div class="kpi-label">This Month's Traffic</div>
+            <div class="kpi-icon blue">📶</div>
+          </div>
+          <div class="kpi-value" id="kpi-traffic">86,417</div>
+          <div class="kpi-footer">
+            <span class="kpi-badge up">↑ +1.2%</span>
+            <span class="kpi-desc">vs. last month</span>
+          </div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-header">
+            <div class="kpi-label">Friend Count</div>
+            <div class="kpi-icon green">👥</div>
+          </div>
+          <div class="kpi-value" id="kpi-friends">140,982</div>
+          <div class="kpi-footer">
+            <span class="kpi-badge up">↑ +16,784</span>
+            <span class="kpi-desc">new this month</span>
+          </div>
+        </div>
+        <div class="kpi-card teal">
+          <div class="kpi-header">
+            <div class="kpi-label">Binding Rate</div>
+            <div class="kpi-icon teal">🔗</div>
+          </div>
+          <div class="kpi-value" id="kpi-bindrate">41.7<em>%</em></div>
+          <div class="kpi-footer">
+            <span class="kpi-badge up">↑ +9.5pp</span>
+            <span class="kpi-desc">improvement vs. last month</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight">
+        <span class="ins-icon">💡</span>
+        <div>
+          <strong>Key Insight：</strong>EC LINE OA 流量從 Dec 11% 成長至 Apr 100%（PX 停播月），EC 已成主力渠道。VIP Campaign 轉換率 <strong>5.26%</strong> 為所有類型最高，貼圖活動單月帶 <strong>26,227 新綁定</strong>。
+        </div>
+      </div>
+
+      <div class="grid-64">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Post Engagement Trends</div>
+              <div class="card-sub">月度業績趨勢 — EC vs PX LINE OA（萬元）</div>
+            </div>
+            <div class="chip">Dec '25 – Apr '26</div>
+          </div>
+          <canvas id="c-rev" height="180"></canvas>
+          <div class="legend">
+            <div class="leg-item"><div class="leg-dot" style="background:#10b981"></div><span class="src-tag ec">EC</span> 全電商 OA</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div><span class="src-tag px">PX</span> 官方 OA</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Placement View Distribution</div>
+            <div class="card-sub">流量渠道佔比（EC vs PX）</div></div>
+          </div>
+          <canvas id="c-donut" height="180"></canvas>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Campaign Performance by Channel</div>
+            <div class="card-sub">ROAS 月度對比 — EC vs PX LINE OA</div></div>
+          </div>
+          <canvas id="c-roas" height="180"></canvas>
+          <div class="legend">
+            <div class="leg-item"><div class="leg-dot" style="background:#10b981"></div>EC ROAS</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div>PX ROAS</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Conversion Rate Trend</div>
+            <div class="card-sub">EC 月轉換率（訂單 ÷ 流量）</div></div>
+          </div>
+          <canvas id="c-conv" height="180"></canvas>
+        </div>
+      </div>
+
+    </div><!-- /overview -->
+
+    <!-- ════════════════ PAGE: TREND ════════════════ -->
+    <div id="page-trend" class="page-section">
+
+      <!-- Channel toggle only -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+        <span style="font-size:11px;color:var(--t2);font-weight:600">Channel：</span>
+        <div class="src-toggle">
+          <button class="src-btn ec active" id="tsrc-ec" onclick="setTSrc('EC',this)">EC 全電商 OA</button>
+          <button class="src-btn px" id="tsrc-px" onclick="setTSrc('PX',this)">PX 官方 OA</button>
+        </div>
+        <span style="font-size:11px;color:var(--t3);margin-left:4px">三項指標同步顯示，方便橫向比較</span>
+      </div>
+
+      <!-- 業績 -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-head">
+          <div>
+            <div class="card-title" id="t-rev-title">EC — 各月業績來源拆解</div>
+            <div class="card-sub">Post / Menu / VIP Campaign / Message 貢獻（萬元）</div>
+          </div>
+          <div class="chip" id="t-rev-total"></div>
+        </div>
+        <canvas id="c-t-rev" height="130"></canvas>
+        <div class="legend" id="t-rev-legend"></div>
+      </div>
+
+      <!-- 流量 & 訂單 並排 -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title" id="t-flow-title">EC — 各月流量來源拆解</div>
+              <div class="card-sub">各類型進站人數</div>
+            </div>
+            <div class="chip" id="t-flow-total"></div>
+          </div>
+          <canvas id="c-t-flow" height="170"></canvas>
+          <div class="legend" id="t-flow-legend"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title" id="t-ord-title">EC — 各月訂單來源拆解</div>
+              <div class="card-sub">各類型訂單數（Mar/Apr 來自明細）</div>
+            </div>
+            <div class="chip" id="t-ord-total"></div>
+          </div>
+          <canvas id="c-t-ord" height="170"></canvas>
+          <div class="legend" id="t-ord-legend"></div>
+        </div>
+      </div>
+
+    </div><!-- /trend -->
+
+    <!-- ════════════════ PAGE: CAMPAIGN ════════════════ -->
+    <div id="page-campaign" class="page-section">
+
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <span style="font-size:11px;color:var(--t2);font-weight:600">Channel：</span>
+        <div class="src-toggle">
+          <button class="src-btn ec active" id="csrc-ec" onclick="setCampSrc('EC')">
+            <span class="src-tag ec">EC</span>&nbsp; 全電商 OA
+          </button>
+          <button class="src-btn px" id="csrc-px" onclick="setCampSrc('PX')">
+            <span class="src-tag px">PX</span>&nbsp; 官方 OA
+          </button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="card-head">
+          <div><div class="card-title" id="type-card-title">EC — 各內容類型總覽</div><div class="card-sub">全期合計（Dec '25 – Apr '26）</div></div>
+        </div>
+        <div class="type-grid" id="type-grid"></div>
+      </div>
+
+      <div class="card" style="margin-bottom:18px">
+        <div class="card-head">
+          <div><div class="card-title" id="camp-chart-title">Top 15 Campaigns — 業績排名</div><div class="card-sub">全期合計，已剔除均價異常</div></div>
+        </div>
+        <canvas id="c-camp-bar" height="250"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div><div class="card-title" id="camp-tbl-title">Campaign 明細表</div><div class="card-sub">Top 15，依總收益排序。● 出現月份</div></div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>活動名稱</th><th>渠道</th><th>類型</th><th>月份</th>
+                <th>流量</th><th>訂單</th><th>轉換率</th><th>均價</th><th>總收益</th><th>佔比</th>
+              </tr>
+            </thead>
+            <tbody id="camp-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /campaign -->
+
+    <!-- ════════════════ PAGE: BINDING ════════════════ -->
+    <div id="page-binding" class="page-section">
+
+      <div class="kpi-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kpi-card green">
+          <div class="kpi-header"><div class="kpi-label">累積綁定數</div><div class="kpi-icon green">🔗</div></div>
+          <div class="kpi-value">58,799</div>
+          <div class="kpi-footer"><span class="kpi-badge up">↑ +18,858</span><span class="kpi-desc">May '26 累積</span></div>
+        </div>
+        <div class="kpi-card teal">
+          <div class="kpi-header"><div class="kpi-label">綁定率</div><div class="kpi-icon teal">📊</div></div>
+          <div class="kpi-value">41.7<em>%</em></div>
+          <div class="kpi-footer"><span class="kpi-badge up">↑ Jan 13.4% → May 41.7%</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><div class="kpi-label">好友總數</div><div class="kpi-icon blue">👥</div></div>
+          <div class="kpi-value">140,982</div>
+          <div class="kpi-footer"><span class="kpi-badge up">↑ +16,784</span><span class="kpi-desc">May 新增</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><div class="kpi-label">Apr 綁定 / 新好友</div><div class="kpi-icon blue">⚡</div></div>
+          <div class="kpi-value">104.8<em>%</em></div>
+          <div class="kpi-footer"><span class="kpi-badge up">存量好友補綁啟動</span></div>
+        </div>
+      </div>
+
+      <div class="insight">
+        <span class="ins-icon">🔑</span>
+        <div>
+          <strong>關鍵發現：</strong>Apr 起新增綁定數已超越新增好友數（104.8%），代表大量<strong>舊好友</strong>正在補綁定。貼圖活動是最高效引擎，單波最高帶 <strong>6,992 綁定</strong>（12/28），新好友率高達 95%+。VIP 推播則專攻存量啟動，帶回 <strong>8,907 既有好友</strong>補綁。
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">好友數 vs 綁定數</div><div class="card-sub">累積趨勢（Jan–May '26）</div></div></div>
+          <canvas id="c-friend" height="190"></canvas>
+          <div class="legend">
+            <div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div>好友總數</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#10b981"></div>綁定數</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">綁定率趨勢</div><div class="card-sub">綁定數 ÷ 好友總數（%）</div></div><div class="chip">Target: 50%?</div></div>
+          <canvas id="c-bindrate" height="190"></canvas>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">每月新增好友 vs 新增綁定</div><div class="card-sub">Apr 起綁定超越新好友——存量滲透訊號</div></div></div>
+          <canvas id="c-new-cmp" height="190"></canvas>
+          <div class="legend">
+            <div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div>新增好友</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#10b981"></div>新增綁定</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">Deeplink Campaign — 新好友 vs 既有好友</div><div class="card-sub">各活動帶來的好友組成</div></div></div>
+          <canvas id="c-deeplink" height="190"></canvas>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">貼圖活動各管道綁定轉換率</div><div class="card-sub">LINE OA 推播 vs 外部管道（FB / APP）</div></div></div>
+          <canvas id="c-sticker" height="200"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><div class="card-title">linebinding UTM 月度追蹤</div><div class="card-sub">Post 推播流量 & 轉換率（GA 歸因）</div></div></div>
+          <canvas id="c-linebind" height="200"></canvas>
+          <div class="legend">
+            <div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div>流量</div>
+            <div class="leg-item"><div class="leg-dot" style="background:#10b981"></div>轉換率 %</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deeplink Table -->
+      <div class="card" style="margin-bottom:18px">
+        <div class="card-head"><div><div class="card-title">Deeplink Campaign 效率分析</div><div class="card-sub">新好友率 ≥ 80% 標記 ✦</div></div></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Campaign</th><th>類型</th><th>點擊 / 進入</th><th>新好友</th><th>既有好友</th><th>新好友率</th><th>規劃建議</th></tr></thead>
+            <tbody id="dl-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Planning -->
+      <div class="card" style="border-color:#a7f3d0">
+        <div class="card-head"><div><div class="card-title" style="color:var(--green)">📐 下一次綁定 Campaign 規劃建議</div><div class="card-sub">基於現有數據推估最佳策略組合</div></div></div>
+        <div class="plan-grid">
+          <div class="plan-card" style="--c:var(--green);--cc:var(--green)">
+            <div class="plan-rank">🥇 主力引擎</div>
+            <div class="plan-title">LINE OA 貼圖活動</div>
+            <div class="plan-body">• 單場最高 <strong>6,992 綁定</strong>（12/28）<br>• 新好友率 <strong>95%+</strong><br>• 轉換率 <strong>15～20%</strong><br>• 建議：每季 ≥ 2 波，集中節慶前</div>
+          </div>
+          <div class="plan-card" style="--c:#f59e0b;--cc:#d97706">
+            <div class="plan-rank">🥈 存量滲透</div>
+            <div class="plan-title">閃靈地推 + 大全聯場域</div>
+            <div class="plan-body">• 新好友率 <strong>93%</strong>，線下最高效<br>• 單活動帶 <strong>8,445 新好友</strong><br>• 建議：與新店開幕 / 週年慶綁定</div>
+          </div>
+          <div class="plan-card" style="--c:var(--blue);--cc:var(--blue)">
+            <div class="plan-rank">🥉 存量啟動</div>
+            <div class="plan-title">VIP 推播（舊好友回綁）</div>
+            <div class="plan-body">• 新好友率僅 <strong>3.7%</strong><br>• 但帶回 <strong>8,907 既有好友</strong> 補綁<br>• 建議：搭配業績活動同步推播</div>
+          </div>
+        </div>
+        <div class="footer-note">
+          ⚠ 數據缺口：目前無法算出 <strong>CPB（Cost Per Binding）</strong>，需將推播費用與 Deeplink New Contacts 對齊後才能計算。建議下一步完成費用對齊，CPB 是最有說服力的主管彙報指標。
+        </div>
+      </div>
+
+      <div class="footer-note" style="margin-top:14px">
+        * 好友數 & 綁定數：工作表14，月底累積快照（Jan–May '26）。<br>
+        * linebinding UTM 的「訂單」與「收益」為 GA 歸因，非實際綁定完成數，請勿與 Deeplink Acquired Contacts 混用。<br>
+        * PX 和 EC 均為 LINE OA 渠道，PX = 全聯官方 LINE OA，EC = 全電商 LINE OA。
+      </div>
+
+    </div><!-- /binding -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+// ── DATA ────────────────────────────────────────────────────────────
+const MONTHS = ["Dec '25","Jan '26","Feb '26","Mar '26","Apr '26"];
+const MO = ["Dec","Jan","Feb","Mar","Apr"];
+
+const EC_REV   = [869281,29613779,15136123,26089965,14018766];
+const PX_REV   = [5255162,3898177,2601473,3267802,0];
+const EC_FLOW  = [12375,79313,50444,85362,86417];
+const PX_FLOW  = [100834,98363,59645,76327,0];
+const EC_ORD   = [266,2580,2142,4549,3580];
+const PX_ORD   = [2319,1664,1128,0,0];
+const EC_ROAS  = [38.5,178.5,104.0,null,null];
+const PX_ROAS  = [63.4,56.2,34.7,42.5,null];
+const EC_CONV  = [2.15,3.25,4.25,5.30,4.14];
+
+const MD = {EC:{Post:{Dec:{flow:3213,revenue:214813,orders:78},Jan:{flow:35233,revenue:9776824,orders:1119},Feb:{flow:18214,revenue:8677859,orders:763},Mar:{flow:33381,revenue:7614059,orders:1479},Apr:{flow:32353,revenue:5543906,orders:1116}},Menu:{Dec:{flow:9114,revenue:654028,orders:187},Jan:{flow:36499,revenue:8910609,orders:1142},Feb:{flow:7397,revenue:980806,orders:515},Mar:{flow:5136,revenue:2664680,orders:431},Apr:{flow:37766,revenue:4456352,orders:1492}},"VIP Campaign":{Dec:{flow:0,revenue:0,orders:0},Jan:{flow:0,revenue:0,orders:0},Feb:{flow:18980,revenue:282949,orders:678},Mar:{flow:41663,revenue:9248850,orders:2305},Apr:{flow:8351,revenue:2172242,orders:643}},Message:{Dec:{flow:29,revenue:440,orders:1},Jan:{flow:6642,revenue:2066214,orders:150},Feb:{flow:5604,revenue:416617,orders:167},Mar:{flow:4640,revenue:1609556,orders:310},Apr:{flow:7048,revenue:1190986,orders:277}},Live:{Dec:{flow:0,revenue:0,orders:0},Jan:{flow:0,revenue:0,orders:0},Feb:{flow:0,revenue:0,orders:0},Mar:{flow:0,revenue:0,orders:0},Apr:{flow:0,revenue:0,orders:0}}},PX:{Post:{Dec:{flow:92162,revenue:4116516,orders:1972},Jan:{flow:90997,revenue:3558391,orders:1483},Feb:{flow:54769,revenue:141171,orders:1024},Mar:{flow:66647,revenue:2678706,orders:1280},Apr:{flow:86031,revenue:1720974,orders:935}},Menu:{Dec:{flow:3056,revenue:153867,orders:77},Jan:{flow:3649,revenue:120296,orders:73},Feb:{flow:3417,revenue:10884,orders:54},Mar:{flow:3670,revenue:109577,orders:57},Apr:{flow:3977,revenue:113209,orders:66}},"VIP Campaign":{Dec:{flow:0,revenue:0,orders:0},Jan:{flow:0,revenue:0,orders:0},Feb:{flow:0,revenue:0,orders:0},Mar:{flow:0,revenue:0,orders:0},Apr:{flow:0,revenue:0,orders:0}},Message:{Dec:{flow:0,revenue:0,orders:0},Jan:{flow:0,revenue:0,orders:0},Feb:{flow:0,revenue:0,orders:0},Mar:{flow:0,revenue:0,orders:0},Apr:{flow:0,revenue:0,orders:0}},Live:{Dec:{flow:5616,revenue:984779,orders:270},Jan:{flow:3717,revenue:219490,orders:108},Feb:{flow:1459,revenue:0,orders:50},Mar:{flow:6000,revenue:517852,orders:183},Apr:{flow:1399,revenue:85071,orders:52}}}};
+
+const EC_CAMPS=[{name:"vip_jan_p2-1",type:"Menu",months:["Jan","Feb","Mar","Apr"],flow:15231,orders:672,revenue:4862530,conv:4.41,avg_price:7236},{name:"vip_faq",type:"Message",months:["Dec","Jan","Feb","Mar","Apr"],flow:2421,orders:238,revenue:3582495,conv:9.83,avg_price:15052},{name:"2-1_p1-4",type:"VIP Campaign",months:["Feb","Mar","Apr"],flow:24707,orders:1298,revenue:3287489,conv:5.25,avg_price:2533},{name:"尾牙祭p2-1",type:"Menu",months:["Dec","Jan","Feb","Mar"],flow:7806,orders:328,revenue:2945444,conv:4.2,avg_price:8980},{name:"3-1_p1-1",type:"VIP Campaign",months:["Mar","Apr"],flow:9432,orders:432,revenue:2550756,conv:4.58,avg_price:5905},{name:"3-1_p1-3",type:"VIP Campaign",months:["Mar","Apr"],flow:10610,orders:785,revenue:2166481,conv:7.4,avg_price:2760},{name:"vip_0102",type:"Post",months:["Dec","Jan","Feb","Mar","Apr"],flow:2343,orders:118,revenue:2068992,conv:5.04,avg_price:17534},{name:"vip_0108",type:"Post",months:["Jan","Feb","Mar","Apr"],flow:2693,orders:113,revenue:1994376,conv:4.2,avg_price:17649},{name:"linebinding",type:"Post",months:["Dec","Jan","Feb","Mar","Apr"],flow:6373,orders:399,revenue:1890834,conv:6.26,avg_price:4739},{name:"home",type:"Menu",months:["Apr"],flow:9807,orders:473,revenue:1445972,conv:4.82,avg_price:3057},{name:"首購7折",type:"Menu",months:["Apr"],flow:9351,orders:447,revenue:1442033,conv:4.78,avg_price:3226},{name:"2-1_p1-1",type:"VIP Campaign",months:["Feb","Mar","Apr"],flow:9147,orders:422,revenue:1382453,conv:4.61,avg_price:3276},{name:"vip_0114discount",type:"Post",months:["Jan","Feb","Mar","Apr"],flow:3255,orders:163,revenue:1378150,conv:5.01,avg_price:8455},{name:"vip_0327bn",type:"Post",months:["Mar","Apr"],flow:1156,orders:57,revenue:1253026,conv:4.93,avg_price:21983},{name:"3-1_p1-7",type:"VIP Campaign",months:["Mar","Apr"],flow:8004,orders:325,revenue:1179758,conv:4.06,avg_price:3630}];
+const PX_CAMPS=[{name:"1211_pxlive",type:"Live",months:["Dec","Jan","Feb","Mar"],flow:5515,orders:268,revenue:969064,conv:4.86,avg_price:3616},{name:"1211-3_12-1_01",type:"Post",months:["Dec","Jan","Feb","Mar"],flow:2830,orders:137,revenue:451470,conv:4.84,avg_price:3295},{name:"1212-3_12-1_01",type:"Post",months:["Dec","Jan","Feb","Mar"],flow:4349,orders:171,revenue:430372,conv:3.93,avg_price:2517},{name:"(not set)",type:"Post",months:["Dec","Jan","Feb","Mar","Apr"],flow:2910,orders:26,revenue:403240,conv:0.89,avg_price:15509},{name:"0305_pxlive",type:"Live",months:["Mar","Apr"],flow:3028,orders:104,revenue:349513,conv:3.43,avg_price:3361},{name:"0308-1_2-2_03",type:"Post",months:["Mar","Apr"],flow:425,orders:12,revenue:328150,conv:2.82,avg_price:27346},{name:"週年慶",type:"Post",months:["Jan","Feb","Mar","Apr"],flow:3126,orders:83,revenue:283295,conv:2.66,avg_price:3413},{name:"0321-3_3-1_01",type:"Post",months:["Mar","Apr"],flow:7082,orders:106,revenue:253110,conv:1.5,avg_price:2388},{name:"0403-1_3-2_10",type:"Post",months:["Apr"],flow:156,orders:10,revenue:198748,conv:6.41,avg_price:19875},{name:"0326_pxlive",type:"Live",months:["Mar","Apr"],flow:3539,orders:85,revenue:170461,conv:2.4,avg_price:2005},{name:"0129_pxlive",type:"Live",months:["Jan","Feb","Mar","Apr"],flow:3868,orders:115,revenue:166832,conv:2.97,avg_price:1451},{name:"0109-1_1-1_12",type:"Post",months:["Jan","Feb","Mar","Apr"],flow:588,orders:6,revenue:110138,conv:1.02,avg_price:18356},{name:"kc_260403-260409",type:"Post",months:["Mar","Apr"],flow:5055,orders:15,revenue:109524,conv:0.3,avg_price:7302},{name:"1217-2_12-1_01",type:"Post",months:["Dec","Jan","Feb","Mar","Apr"],flow:2221,orders:63,revenue:100660,conv:2.84,avg_price:1598},{name:"1205-1_12-1_01",type:"Post",months:["Dec","Jan","Feb"],flow:95,orders:5,revenue:100160,conv:5.26,avg_price:20032}];
+
+const FRIEND_DATA = [{month:"Jan '26",friends:62438,bound:8343,bind_rate:13.4,new_friends:62438,new_bound:8343},{month:"Feb '26",friends:104148,bound:19821,bind_rate:19.0,new_friends:41710,new_bound:11478},{month:"Mar '26",friends:111761,bound:26912,bind_rate:24.1,new_friends:7613,new_bound:7091},{month:"Apr '26",friends:124198,bound:39941,bind_rate:32.2,new_friends:12437,new_bound:13029},{month:"May '26",friends:140982,bound:58799,bind_rate:41.7,new_friends:16784,new_bound:18858}];
+
+const DL_DATA=[{name:"貼圖宣傳導流",type:"Sticker",acquired:31931,new_c:26227,existing:5704,new_rate:82.1,note:"主力拉新，每季≥2波"},{name:"閃靈宣傳_總部OA",type:"OA推播",acquired:13450,new_c:12378,existing:1072,new_rate:92.0,note:"配合線下 IP 活動效果最佳"},{name:"閃靈宣傳_大全聯地推",type:"Offline",acquired:9065,new_c:8445,existing:620,new_rate:93.2,note:"實體場域，與新開幕/週年慶綁定"},{name:"VIP貼文_總部導流",type:"OA推播",acquired:9249,new_c:342,existing:8907,new_rate:3.7,note:"啟動存量好友補綁，非拉新"},{name:"全聯新春大禮包",type:"Campaign",acquired:3282,new_c:2916,existing:366,new_rate:88.8,note:"節慶 Campaign 高效，建議複製"},{name:"新年綁定抽獎",type:"Campaign",acquired:2689,new_c:2003,existing:686,new_rate:74.5,note:"抽獎誘因，適合帶動沉睡好友"},{name:"樂天路跑",type:"Event",acquired:3123,new_c:1980,existing:1143,new_rate:63.4,note:"異業合作，建議評估 CPB"},{name:"商品展",type:"Event",acquired:2857,new_c:1836,existing:1021,new_rate:64.3,note:"實體展會，評估 CPB 後決定投入"}];
+
+const TYPE_INFO = {
+  EC:{Post:{icon:"📮",rev:31827461,flow:122394,orders:4555,conv:3.72},Menu:{icon:"📋",rev:17666475,flow:95912,orders:3767,conv:3.93},"VIP Campaign":{icon:"🎯",rev:11704041,flow:68994,orders:3626,conv:5.26},Message:{icon:"💬",rev:5283813,flow:23963,orders:905,conv:3.78}},
+  PX:{Post:{icon:"📮",rev:12623519,flow:385550,orders:6679,conv:1.73},Live:{icon:"📺",rev:2157166,flow:18191,orders:663,conv:3.65},Menu:{icon:"📋",rev:507833,flow:17769,orders:327,conv:1.84}}
+};
+const TYPE_COLORS = {Post:"#10b981",Menu:"#3b82f6","VIP Campaign":"#f59e0b",Message:"#8b5cf6",Live:"#f43f5e",Other:"#94a3b8"};
+
+// ── CHART DEFAULTS ────────────────────────────────────────────────
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+Chart.defaults.font.size = 11;
+const GRID = { color:'rgba(226,232,240,.8)', drawBorder:false };
+
+// ── OVERVIEW CHARTS ───────────────────────────────────────────────
+new Chart(document.getElementById('c-rev'),{type:'bar',data:{labels:MONTHS,datasets:[
+  {label:'EC',data:EC_REV.map(v=>Math.round(v/1e4)),backgroundColor:'#10b981',borderRadius:5,borderSkipped:false},
+  {label:'PX',data:PX_REV.map(v=>Math.round(v/1e4)),backgroundColor:'#3b82f6',borderRadius:5,borderSkipped:false},
+]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}萬`}}},scales:{x:{stacked:true,grid:GRID},y:{stacked:true,grid:GRID,ticks:{callback:v=>v+'萬'}}}}});
+
+// Donut – Apr only
+const aprEC=EC_FLOW[4], aprPX=PX_FLOW[4];
+new Chart(document.getElementById('c-donut'),{type:'doughnut',data:{labels:['EC 全電商 OA','PX 官方 OA'],datasets:[{data:[aprEC,aprPX],backgroundColor:['#10b981','#3b82f6'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,cutout:'70%',plugins:{legend:{position:'bottom',labels:{padding:16,font:{size:11}}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed.toLocaleString()}`}}}}});
+
+new Chart(document.getElementById('c-roas'),{type:'line',data:{labels:MONTHS,datasets:[
+  {label:'EC ROAS',data:EC_ROAS,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#10b981',spanGaps:true},
+  {label:'PX ROAS',data:PX_ROAS,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#3b82f6',spanGaps:true},
+]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y}x`}}},scales:{x:{grid:GRID},y:{grid:GRID,ticks:{callback:v=>v+'x'}}}}});
+
+new Chart(document.getElementById('c-conv'),{type:'line',data:{labels:MONTHS,datasets:[{label:'EC 轉換率',data:EC_CONV,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#06b6d4'}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` 轉換率: ${c.parsed.y}%`}}},scales:{x:{grid:GRID},y:{grid:GRID,ticks:{callback:v=>v+'%'}}}}});
+
+// ── TREND: 3 charts simultaneously ───────────────────────────────
+const TC = {Post:'#10b981',Menu:'#3b82f6','VIP Campaign':'#f59e0b',Message:'#8b5cf6',Live:'#f43f5e'};
+let tRevCh=null, tFlowCh=null, tOrdCh=null, tSrc='EC';
+
+function buildDS(src, metric){
+  const types = src==='EC' ? ['Post','Menu','VIP Campaign','Message'] : ['Post','Menu','Live'];
+  return types.map(t=>({
+    label: t,
+    data: MO.map(m => {
+      const v = MD[src][t][m][metric];
+      return metric==='revenue' ? Math.round(v/1e4) : v;
+    }),
+    backgroundColor: TC[t],
+    borderRadius: 0,
+  }));
+}
+
+function makeLegend(src, elId){
+  const types = src==='EC' ? ['Post','Menu','VIP Campaign','Message'] : ['Post','Menu','Live'];
+  document.getElementById(elId).innerHTML = types.map(t=>
+    `<div class="leg-item"><div class="leg-dot" style="background:${TC[t]}"></div>${t}</div>`
+  ).join('');
+}
+
+function calcTotal(src, metric){
+  const types = src==='EC' ? ['Post','Menu','VIP Campaign','Message'] : ['Post','Menu','Live'];
+  let total = 0;
+  types.forEach(t => MO.forEach(m => { total += MD[src][t][m][metric]; }));
+  if(metric==='revenue') return '$'+Math.round(total/1e4)+'萬 累計';
+  return total.toLocaleString()+' 累計';
+}
+
+function renderTrend(){
+  const src = tSrc;
+  const lbl = src==='EC' ? 'EC 全電商 OA' : 'PX 官方 OA';
+
+  // titles & totals
+  document.getElementById('t-rev-title').textContent  = `${lbl} — 各月業績拆解`;
+  document.getElementById('t-flow-title').textContent = `${lbl} — 各月流量拆解`;
+  document.getElementById('t-ord-title').textContent  = `${lbl} — 各月訂單拆解`;
+  document.getElementById('t-rev-total').textContent  = calcTotal(src,'revenue');
+  document.getElementById('t-flow-total').textContent = calcTotal(src,'flow');
+  document.getElementById('t-ord-total').textContent  = calcTotal(src,'orders');
+  makeLegend(src,'t-rev-legend');
+  makeLegend(src,'t-flow-legend');
+  makeLegend(src,'t-ord-legend');
+
+  const mkOpts = (cb) => ({
+    responsive:true,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{stacked:true, grid:GRID},
+      y:{stacked:true, grid:GRID, ticks:{callback:cb}}
+    }
+  });
+
+  const dsRev  = buildDS(src,'revenue');
+  const dsFlow = buildDS(src,'flow');
+  const dsOrd  = buildDS(src,'orders');
+
+  if(tRevCh){
+    tRevCh.data.datasets=dsRev;   tRevCh.update();
+    tFlowCh.data.datasets=dsFlow; tFlowCh.update();
+    tOrdCh.data.datasets=dsOrd;   tOrdCh.update();
+  } else {
+    tRevCh  = new Chart(document.getElementById('c-t-rev'),  {type:'bar',data:{labels:MONTHS,datasets:dsRev},  options:mkOpts(v=>v+'萬')});
+    tFlowCh = new Chart(document.getElementById('c-t-flow'), {type:'bar',data:{labels:MONTHS,datasets:dsFlow}, options:mkOpts(v=>v>=1000?Math.round(v/1000)+'K':v)});
+    tOrdCh  = new Chart(document.getElementById('c-t-ord'),  {type:'bar',data:{labels:MONTHS,datasets:dsOrd},  options:mkOpts(v=>v)});
+  }
+}
+
+function setTSrc(s,btn){
+  tSrc=s;
+  document.querySelectorAll('.src-btn[id^=tsrc]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTrend();
+}
+
+renderTrend();
+
+// ── CAMPAIGN ─────────────────────────────────────────────────────
+let campBarCh=null, curCampSrc='EC';
+function renderTypeGrid(src){
+  const info=TYPE_INFO[src];
+  const colors={Post:'#10b981',Menu:'#3b82f6','VIP Campaign':'#f59e0b',Message:'#8b5cf6',Live:'#f43f5e'};
+  document.getElementById('type-grid').innerHTML=Object.entries(info).map(([t,d])=>{
+    const c=colors[t]||'#94a3b8';
+    return `<div class="type-card" style="--c:${c}"><div class="type-name">${d.icon} ${t}</div><div class="type-rev" style="color:${c}">$${d.rev.toLocaleString()}</div><div class="type-meta">流量 ${d.flow.toLocaleString()} ／ 訂單 ${d.orders.toLocaleString()} ／ <strong style="color:${d.conv>=5?'var(--green)':'inherit'}">${d.conv}%${d.conv>=5?' ✦':''}</strong></div></div>`;
+  }).join('');
+}
+function renderCampBar(camps,src){
+  const bg=camps.map(c=>TYPE_COLORS[c.type]||'#94a3b8');
+  if(campBarCh){campBarCh.data.labels=camps.map(c=>c.name);campBarCh.data.datasets[0].data=camps.map(c=>c.revenue);campBarCh.data.datasets[0].backgroundColor=bg;campBarCh.update();}
+  else{campBarCh=new Chart(document.getElementById('c-camp-bar'),{type:'bar',data:{labels:camps.map(c=>c.name),datasets:[{label:'收益',data:camps.map(c=>c.revenue),backgroundColor:bg,borderRadius:4}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` 收益: $${c.parsed.x.toLocaleString()}`}}},scales:{x:{grid:GRID,ticks:{callback:v=>Math.round(v/1e4)+'萬'}},y:{grid:{display:false}}}}});}
+}
+function renderCampTable(camps,src){
+  const maxR=camps[0].revenue;
+  const srcCls=src==='EC'?'ec':'px';
+  document.getElementById('camp-tbody').innerHTML=camps.map((c,i)=>{
+    const pct=(c.revenue/maxR*100).toFixed(1);
+    const tc=TYPE_COLORS[c.type]||'#94a3b8';
+    const dots=MO.map(m=>`<span class="mdot ${c.months.includes(m)?'on':''}">${m}</span>`).join('');
+    return `<tr><td class="td-mono">${i+1}</td><td class="td-name">${c.name}</td><td><span class="src-tag ${srcCls}">${src}</span></td><td><span class="type-pill" style="color:${tc};background:${tc}22">${c.type}</span></td><td><div class="month-dots">${dots}</div></td><td class="td-mono">${c.flow.toLocaleString()}</td><td class="td-mono">${c.orders.toLocaleString()}</td><td class="td-mono ${c.conv>=5?'td-hi':''}">${c.conv}%</td><td class="td-mono">$${c.avg_price.toLocaleString()}</td><td class="td-rev">$${c.revenue.toLocaleString()}</td><td><div class="bar-wrap"><div class="mini-bg"><div class="mini-fill" style="width:${pct}%;background:${src==='EC'?'#10b981':'#3b82f6'}"></div></div><span class="td-mono" style="font-size:10px;min-width:28px">${pct}%</span></div></td></tr>`;
+  }).join('');
+}
+function setCampSrc(src){
+  curCampSrc=src;
+  const camps=src==='EC'?EC_CAMPS:PX_CAMPS;
+  document.getElementById('csrc-ec').classList.toggle('active',src==='EC');
+  document.getElementById('csrc-px').classList.toggle('active',src==='PX');
+  ['type-card-title','camp-chart-title','camp-tbl-title'].forEach(id=>{
+    const map={'type-card-title':`${src} — 各內容類型總覽`,'camp-chart-title':`Top 15 ${src} Campaigns — 業績排名`,'camp-tbl-title':`${src} Campaign 明細表`};
+    document.getElementById(id).textContent=map[id];
+  });
+  renderTypeGrid(src); renderCampBar(camps,src); renderCampTable(camps,src);
+}
+setCampSrc('EC');
+
+// ── BINDING CHARTS ────────────────────────────────────────────────
+const fM=FRIEND_DATA.map(d=>d.month);
+new Chart(document.getElementById('c-friend'),{type:'line',data:{labels:fM,datasets:[
+  {label:'好友總數',data:FRIEND_DATA.map(d=>d.friends),borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.07)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#3b82f6'},
+  {label:'綁定數',  data:FRIEND_DATA.map(d=>d.bound),  borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.08)',fill:true,tension:.4,pointRadius:5,pointBackgroundColor:'#10b981'},
+]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:GRID},y:{grid:GRID,ticks:{callback:v=>v>=1000?Math.round(v/1000)+'K':v}}}}});
+
+new Chart(document.getElementById('c-bindrate'),{type:'line',data:{labels:fM,datasets:[{label:'綁定率',data:FRIEND_DATA.map(d=>d.bind_rate),borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,.08)',fill:true,tension:.4,pointRadius:6,pointBackgroundColor:'#06b6d4'}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` 綁定率: ${c.parsed.y}%`}}},scales:{x:{grid:GRID},y:{grid:GRID,min:0,max:55,ticks:{callback:v=>v+'%'}}}}});
+
+new Chart(document.getElementById('c-new-cmp'),{type:'bar',data:{labels:fM,datasets:[
+  {label:'新增好友',data:FRIEND_DATA.map(d=>d.new_friends),backgroundColor:'#3b82f6',borderRadius:4},
+  {label:'新增綁定',data:FRIEND_DATA.map(d=>d.new_bound), backgroundColor:'#10b981',borderRadius:4},
+]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:GRID},y:{grid:GRID,ticks:{callback:v=>v>=1000?Math.round(v/1000)+'K':v}}}}});
+
+new Chart(document.getElementById('c-deeplink'),{type:'bar',data:{labels:DL_DATA.map(d=>d.name),datasets:[
+  {label:'新好友',  data:DL_DATA.map(d=>d.new_c),    backgroundColor:'#10b981'},
+  {label:'既有好友',data:DL_DATA.map(d=>d.existing), backgroundColor:'#3b82f6'},
+]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{stacked:true,grid:GRID,ticks:{callback:v=>v>=1000?Math.round(v/1000)+'K':v}},y:{stacked:true,grid:{display:false}}}}});
+
+const sData=[{ch:"OA 12/22",rate:16.8},{ch:"OA 12/23",rate:14.3},{ch:"OA 12/28",rate:16.7},{ch:"OA 1/7",rate:18.7},{ch:"OA 1/13",rate:19.7},{ch:"Richmenu",rate:19.3},{ch:"FB_1",rate:15.1},{ch:"FB_2",rate:13.8},{ch:"pxgo",rate:10.4},{ch:"APP蓋板",rate:9.5}];
+new Chart(document.getElementById('c-sticker'),{type:'bar',data:{labels:sData.map(d=>d.ch),datasets:[{label:'綁定轉換率%',data:sData.map(d=>d.rate),backgroundColor:sData.map(d=>d.ch.startsWith('OA')||d.ch==='Richmenu'?'#10b981':'#3b82f6'),borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:GRID,ticks:{callback:v=>v+'%'}}}}});
+
+const lbData=[{m:"Dec",flow:601,conv:4.33},{m:"Jan",flow:3754,conv:5.22},{m:"Feb",flow:1378,conv:7.91},{m:"Mar",flow:527,conv:10.82},{m:"Apr",flow:113,conv:9.73}];
+new Chart(document.getElementById('c-linebind'),{type:'bar',data:{labels:lbData.map(d=>d.m),datasets:[
+  {label:'流量',   data:lbData.map(d=>d.flow),type:'bar', backgroundColor:'rgba(59,130,246,.3)',borderRadius:4,yAxisID:'y'},
+  {label:'轉換率',data:lbData.map(d=>d.conv),type:'line',borderColor:'#10b981',backgroundColor:'transparent',pointRadius:5,pointBackgroundColor:'#10b981',tension:.3,yAxisID:'y2'},
+]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:GRID,position:'left',ticks:{callback:v=>v>=1000?Math.round(v/1000)+'K':v}},y2:{grid:{display:false},position:'right',ticks:{callback:v=>v+'%'},min:0,max:15}}}});
+
+// Deeplink table
+const dlTC={'Sticker':'#f59e0b','OA推播':'#10b981','Offline':'#f43f5e','Campaign':'#3b82f6','Event':'#8b5cf6'};
+document.getElementById('dl-tbody').innerHTML=DL_DATA.map(d=>{
+  const c=dlTC[d.type]||'#94a3b8';
+  const hi=d.new_rate>=80;
+  return `<tr><td class="td-name">${d.name}</td><td><span class="type-pill" style="color:${c};background:${c}22">${d.type}</span></td><td class="td-mono">${d.acquired.toLocaleString()}</td><td class="td-mono" style="color:var(--green);font-weight:700">${d.new_c.toLocaleString()}</td><td class="td-mono">${d.existing.toLocaleString()}</td><td class="td-mono ${hi?'td-hi':''}">${d.new_rate}%${hi?' ✦':''}</td><td style="font-size:11px;color:var(--t2)">${d.note}</td></tr>`;
+}).join('');
+
+// ── NAVIGATION ────────────────────────────────────────────────────
+const PAGE_LABELS={overview:'總覽',trend:'月度趨勢',campaign:'Campaign 分析',binding:'綁定分析'};
+function navTo(name,btn){
+  document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('active-page-label').textContent='— '+PAGE_LABELS[name];
+}
+
+// ── FILTER (cosmetic) ─────────────────────────────────────────────
+function applyFilter(){
+  const ch=document.getElementById('filter-channel').value;
+  if(ch.includes('EC'))      setCampSrc('EC');
+  else if(ch.includes('PX')) setCampSrc('PX');
+}
+</script>
+</body>
+</html>

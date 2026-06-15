@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全聯電商 × LINE 會員數據閉環 — Silvia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a class="brand" href="../Silvia Yang - Portfolio.html">Silvia's portfolio</a>
+    <span class="proj-name">全聯電商 ｜ CRM × DATA</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" data-screen-label="Hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid-deco"></div>
+  <div class="hero-bg-num">42%</div>
+  <div class="container">
+    <div class="hero-kicker" data-stage style="--sd:.05s">
+      <b>全聯電商 × Silvia</b><span class="dot"></span><span>電商　·　CRM　·　數據策略</span>
+    </div>
+    <h1 class="hero-title" data-stage style="--sd:.15s">全聯電商 × LINE<br><span class="hl">會員數據閉環。</span></h1>
+    <p class="hero-sub" data-stage style="--sd:.30s">在資源有限、系統分散的限制下重新定義綁定路徑，四個月將 LINE 好友綁定率從 13% 拉升至 42%，建立全聯電商首個可規模化的精準再行銷基礎建設。</p>
+    <div class="hero-meta" data-stage style="--sd:.44s">
+      <div class="meta-cell"><div class="k">Role</div><div class="v">Product Owner（定義 What &amp; Why）</div></div>
+      <div class="meta-cell"><div class="k">Timeline</div><div class="v">2026 Q1 – Q2（4 個月）</div></div>
+      <div class="meta-cell"><div class="k">核心成果</div><div class="v">綁定率 13% → 42%</div></div>
+      <div class="meta-cell"><div class="k">營收成長</div><div class="v">年貨大街檔期 20×</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- 01 BACKGROUND -->
+<section data-screen-label="01 Background">
+  <div class="container">
+    <span class="eyebrow">01 — Background</span>
+    <h2 class="sec-title">數據孤島，<span class="ink-blue">推播失效</span></h2>
+    <p class="sec-body">全聯全電商 LINE 官方帳號是連結線上流量與線下消費的關鍵橋樑。但在專案啟動前，LINE 好友數與電商 App 會員（MID）之間存在嚴重的 Data Silo——兩個系統各自為政，推播訊息無法依消費行為個人化，導致轉換率低、封鎖率高，大量行銷預算在「廣播式推播」中被稀釋。</p>
+    <div class="split">
+      <div class="quote-dark">
+        <span class="qd-tag">核心挑戰</span>
+        <p>外部 LINE 標籤與內部交易數據無法串接，推播就像對著空氣說話——我們知道有人在，但不知道他是誰。</p>
+      </div>
+      <div class="role-note">
+        <span class="role-badge"><span class="rb-dot"></span>我的角色：PO — 定義 What &amp; Why</span>
+        <p>IT 夥伴擔任 Scrum Master，負責 How &amp; Process。明確的職能分工讓我專注在需求定義、優先級排序與跨部門溝通（IT、行銷、外部廠商 MAAC）。</p>
+        <div class="chip-row">
+          <span class="chip">LID Mapping</span><span class="chip">Data Silo</span><span class="chip">LINE OA</span><span class="chip">PXPAY</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 PROBLEM -->
+<section data-screen-label="02 Problem">
+  <div class="container">
+    <span class="eyebrow">02 — Problem</span>
+    <h2 class="sec-title">問題不在哪裡，才是真正的洞察<span class="ink-blue"></span></h2>
+
+    <div class="problem-visual fade-up">
+      <img src="problem-chart.png" alt="流量來源分析圖表" style="width: 100%; max-width: 900px; margin: 0 auto; display: block; border-radius: 8px;">
+    </div>
+
+    <div class="pivot">
+      <span class="pivot-tag">數據洞察</span>
+      <p>分析非貼圖宣傳期的好友來源後發現：<b>多數新加入者其實來自 App 導流</b>——他們本來就是既有會員、已有 MID，根本不需要重新註冊。</p>
+    </div>
+
+    <div class="insight-loop fade-up" style="max-width: 600px; margin: 40px auto;">
+      <img src="insight-loop.png" alt="數據洞察到策略執行的思考迴圈" style="width: 100%; display: block;">
+    </div>
+
+    <div class="callout" style="margin-top: 40px;">
+      <span class="callout-k">策略 Pivot</span>
+      <p>從「拉新」轉向「盤活既有」。<b>一個有 MID 的綁定會員，數據價值遠高於十個無法識別的匿名好友</b>——Quality 比 Quantity 更重要。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 INSIGHT -->
+<section class="sec-dark" data-screen-label="03 Insight">
+  <div class="container">
+    <span class="eyebrow on-dark">03 — Insight</span>
+    <blockquote class="pull-quote fade-up">Friction 比 Incentive <span class="hl-blue">更值得優先解決</span></blockquote>
+    <p class="dark-lead fade-up">使用者不是沒有需求，而是流程中的阻力太多、理解成本太高。減少一個步驟，往往比增加一個誘因更有效——這個洞察改變了我看待用戶轉換的方式。也讓專案有了清楚的節奏：</p>
+
+    <div class="timeline fade-up">
+      <div class="tl-phase">
+        <span class="tl-label">Phase 1 — 421 前</span>
+        <span class="tl-name">基礎建設期</span>
+        <span class="tl-item key">與 IT 溝通需求、開 Redmine 單</span>
+        <span class="tl-item">Mini App 取得權限</span>
+        <span class="tl-item">規劃 App→LINE 跳轉授權機制</span>
+      </div>
+      <div class="tl-phase">
+        <span class="tl-label">Phase 2 — 421 App 上線</span>
+        <span class="tl-name">MVP 驗證期</span>
+        <span class="tl-item key">以 BN 教學引導方式上線</span>
+        <span class="tl-item">IT 團隊完成測試</span>
+        <span class="tl-item">Mini App 凸版位曝光</span>
+      </div>
+      <div class="tl-phase hot">
+        <span class="tl-label">Phase 3 — 618 前導</span>
+        <span class="tl-name">One-Click Binding</span>
+        <span class="tl-item key">App→LINE 一點就綁，無痛直覺</span>
+        <span class="tl-item key">Mini App MGM 同步推進</span>
+        <span class="tl-item key">流量 ++ ／ 業績 ++</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 SOLUTION -->
+<section data-screen-label="04 Solution">
+  <div class="container">
+    <span class="eyebrow">04 — Solution</span>
+    <h2 class="sec-title">四個決定，<span class="ink-blue">改變了結果</span></h2>
+
+    <div class="decisions">
+      <div class="dcard fade-up">
+        <span class="dnum">決策 01</span>
+        <h4>後台模組化（Feature Modularization）</h4>
+        <p>在全電商後台新增「綁定組件區域」，不做一次性活動頁，而是建立可複用模組。</p>
+        <div class="pmthink"><b>PM Thinking</b>短期多花開發工時，但讓後續每次檔期的綁定功能從「兩週開發」縮短成「兩天設定」。說服 IT 的關鍵論點：「618、雙 11 都會需要，這次做一次就夠了。」</div>
+      </div>
+      <div class="dcard fade-up">
+        <span class="dnum">決策 02</span>
+        <h4>誘因設計（Incentive Design）</h4>
+        <p>向內部爭取「LINE 好友專屬折扣預算」，用折扣作為 hook 驅動 App → LINE 的轉換。</p>
+        <div class="pmthink"><b>PM Thinking</b>用「價值交換」讓行為轉換變得理所當然。用戶不是沒有動機，而是需要一個夠清楚的理由；在資源受限下，折扣是最直接的槓桿。</div>
+      </div>
+      <div class="dcard fade-up">
+        <span class="dnum">決策 03</span>
+        <h4>MVP 分階段上線</h4>
+        <p>將目標依電商檔期拆成三個 Phase，每個里程碑都有可驗證的成果，避免一次上大功能的風險。</p>
+        <div class="pmthink"><b>PM Thinking</b>有明確的檔期壓力反而是優勢——421 是第一個 checkpoint，逼著我們把 MVP 範圍定清楚，而不是無限期優化。</div>
+      </div>
+      <div class="dcard fade-up">
+        <span class="dnum">決策 04</span>
+        <h4>One-Click Binding 技術優化</h4>
+        <p>與 IT 協作優化 OAuth 授權機制，讓用戶從 App 點擊後無需重複輸入帳密，直接完成 LID × MID Mapping。</p>
+        <div class="pmthink"><b>PM Thinking</b>Friction 比 Incentive 更重要。減少一個步驟，往往比增加一個誘因更有效——這個洞察貫穿了整個專案。</div>
+      </div>
+    </div>
+
+    <div class="solution-diagram fade-up" style="margin-top: 60px; max-width: 1000px;">
+      <img src="solution-diagram.png" alt="與團隊溝通的解決方案流程圖" style="width: 100%; display: block;">
+    </div>
+  </div>
+</section>
+
+<!-- 05 RESULT -->
+<section data-screen-label="05 Result">
+  <div class="container">
+    <span class="eyebrow">05 — Result</span>
+    <h2 class="sec-title">數字說話</h2>
+
+    <div class="metrics">
+      <div class="metric hot">
+        <div class="mnum-pair">
+          <span class="before">360萬</span>
+          <span class="arrow">→</span>
+          <span class="after">3,000萬</span>
+        </div>
+        <div class="mlabel">LINE 渠道收益</div>
+      </div>
+      <div class="metric">
+        <div class="mnum-pair">
+          <span class="before">1.2%</span>
+          <span class="arrow">→</span>
+          <span class="after">7.6%</span>
+        </div>
+        <div class="mlabel">收益占比</div>
+      </div>
+      <div class="metric">
+        <div class="mnum-pair">
+          <span class="before">13%</span>
+          <span class="arrow">→</span>
+          <span class="after">42%</span>
+        </div>
+        <div class="mlabel">綁定率</div>
+      </div>
+    </div>
+
+    <p class="sec-body">關鍵在於：<b>好友數同期成長 2.3 倍（62K → 141K）的情況下，綁定率仍持續提升。</b>這說明成果不只是流量自然增長，路徑優化是真實有效的——我也誠實看待這點：好友數的成長確實有檔期曝光的自然效果，但「率」從 13% 提升到 42% 是路徑優化的真實信號，而不只是分子變大。</p>
+
+    <div class="charts fade-up">
+      <div class="chart-box">
+        <div class="chart-head"><span class="ct">綁定率趨勢</span><span class="cs">綁定數 ÷ 好友總數（%）</span></div>
+        <canvas id="cBindRate" height="200"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="chart-head"><span class="ct">好友數 vs 綁定數</span><span class="cs">累積趨勢（Jan – May '26）</span></div>
+        <canvas id="cFriendBound" height="200"></canvas>
+        <div class="legend"><span class="lg"><i style="background:#97C2EC"></i>好友總數</span><span class="lg"><i style="background:#1F1F1F"></i>綁定數</span></div>
+      </div>
+    </div>
+
+    <a class="dash-cta" href="dashboard.html" rel="noopener">
+      <div class="dash-cta-text">
+        <span class="dash-k">Interactive Artifact</span>
+        <span class="dash-t">探索完整的 LINE OA 數據儀表板</span>
+        <span class="dash-s">總覽 · 月度趨勢 · 活動成效 · 綁定分析　—　我為這個專案實際搭建的分析工具</span>
+      </div>
+      <span class="dash-arrow">↗</span>
+    </a>
+  </div>
+</section>
+
+<!-- 06 REFLECTION -->
+<section class="sec-dark" data-screen-label="06 Reflection">
+  <div class="container">
+    <span class="eyebrow on-dark">06 — Reflection</span>
+    <h2 class="reflect-title fade-up">最大的收穫，<br>不是那個數字</h2>
+    <div class="reflect-body fade-up">
+      <p>這段經歷讓我確認，自己想做的不只是「推動活動成效」，而是更前端地參與產品策略與使用者流程設計。</p>
+      <p>最有成就感的，不是最終的數字成長，而是<b>把原本混亂、模糊的目標重新整理成可以被執行的流程</b>，並在大量限制下找到真正能落地的方法。</p>
+      <p>我喜歡在混亂中找結構、從使用者行為中找問題，並透過跨部門協作一步步把事情推動落地。這段經驗讓我更確定自己想往 <b>Product Manager</b> 方向發展。</p>
+    </div>
+  </div>
+</section>
+
+<!-- CASE NAV -->
+<div class="container">
+  <div class="case-nav">
+    <a href="../Silvia Yang - Portfolio.html#projects">← 返回作品集</a>
+    <a href="../case-take/Take Case Study.html" style="text-align:right;"><span style="display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-2);margin-bottom:4px;">下一個專案</span>一份 B2B Sales Kit 的完整改造 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="fi">Silvia's Info.</div>
+    <div class="fc">
+      <a href="mailto:sy.peix@gmail.com">sy.peix@gmail.com</a> · 0937 180 668<br>
+      © 2026 Silvia Yang — Portfolio
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

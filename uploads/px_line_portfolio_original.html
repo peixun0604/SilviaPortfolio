@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全聯電商 × LINE 會員數據閉環 — PM Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=DM+Mono:wght@400;500&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0d0d0d;
+    --white: #f5f2ed;
+    --accent: #1a6cf0;
+    --accent2: #e8f0ff;
+    --muted: #6b6b6b;
+    --border: #e0dbd4;
+    --surface: #faf8f5;
+    --tag-bg: #eef3ff;
+    --tag-color: #2952a3;
+    --success: #0a6e3f;
+    --success-bg: #eafaf2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    font-size: 16px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(245,242,237,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--black); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 120px 48px 80px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+  .hero-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(38px, 6vw, 72px);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.35s forwards;
+  }
+  .hero-title em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.8;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.5s forwards;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.65s forwards;
+  }
+  .hero-meta-item { }
+  .hero-meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .hero-meta-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--black);
+  }
+  .hero-bg-number {
+    position: absolute;
+    right: -20px; bottom: -40px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 280px;
+    font-weight: 900;
+    color: rgba(26,108,240,0.04);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 96px 48px;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  section.visible { opacity: 1; transform: none; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 48px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 900;
+    line-height: 1.3;
+    margin-bottom: 32px;
+    letter-spacing: -0.01em;
+  }
+
+  /* TWO-COL */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  @media (max-width: 768px) {
+    .two-col { grid-template-columns: 1fr; gap: 40px; }
+    nav { padding: 16px 20px; }
+    .hero { padding: 100px 20px 60px; }
+    section { padding: 64px 20px; }
+    .hero-meta { flex-wrap: wrap; gap: 24px; }
+  }
+
+  /* INSIGHT BOX */
+  .insight-box {
+    background: var(--black);
+    color: var(--white);
+    border-radius: 16px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .insight-box::before {
+    content: '"';
+    position: absolute;
+    top: -20px; left: 24px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 140px;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+  }
+  .insight-box p {
+    font-size: 18px;
+    line-height: 1.75;
+    font-weight: 400;
+    position: relative;
+  }
+  .insight-box .insight-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  /* BODY TEXT */
+  .body-text {
+    font-size: 15px;
+    color: #2a2a2a;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+  .body-text strong { font-weight: 500; color: var(--black); }
+
+  /* TAG */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    background: var(--tag-bg);
+    color: var(--tag-color);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin: 3px 3px 3px 0;
+    letter-spacing: 0.04em;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 40px;
+  }
+  .timeline-phase {
+    background: var(--surface);
+    padding: 28px 24px;
+  }
+  .timeline-phase:nth-child(3) { background: var(--accent2); }
+  .phase-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .phase-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 16px;
+  }
+  .phase-name.highlight { color: var(--accent); }
+  .phase-item {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    padding-left: 12px;
+    border-left: 2px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .phase-item.key {
+    border-left-color: var(--accent);
+    color: var(--black);
+  }
+
+  /* DECISIONS */
+  .decision-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 16px;
+    background: var(--surface);
+    transition: border-color 0.2s;
+  }
+  .decision-card:hover { border-color: var(--accent); }
+  .decision-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .decision-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .decision-body {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+  .pm-thinking {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: var(--accent2);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--tag-color);
+    line-height: 1.65;
+  }
+  .pm-thinking strong {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  /* METRICS */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .metric-card.highlight {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+  }
+  .metric-num {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+  .metric-card.highlight .metric-num { color: #fff; }
+  .metric-label {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .metric-card.highlight .metric-label { color: rgba(255,255,255,0.6); }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 32px;
+  }
+  .data-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--black);
+  }
+  .data-table tr:last-child td { border-bottom: none; font-weight: 600; }
+  .rate-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .rate-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    flex: 1;
+    max-width: 120px;
+    overflow: hidden;
+  }
+  .rate-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 1s ease;
+  }
+  .rate-text { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--accent); min-width: 32px; }
+
+  /* QA */
+  .qa-item {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+  }
+  .qa-q {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+  .qa-q span {
+    display: inline-block;
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-right: 10px;
+    vertical-align: middle;
+    letter-spacing: 0.08em;
+  }
+  .qa-a {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    padding-left: 28px;
+    border-left: 2px solid var(--border);
+  }
+
+  /* REFLECTION */
+  .reflection-body {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px;
+    line-height: 2;
+    color: #1a1a1a;
+    font-weight: 400;
+    max-width: 720px;
+  }
+  .reflection-body em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.8s forwards;
+  }
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .back-top {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+  .back-top:hover { color: var(--black); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* PIVOT CALLOUT */
+  .pivot-callout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    margin: 32px 0;
+  }
+  .pivot-icon {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .pivot-text { font-size: 15px; line-height: 1.8; color: var(--black); }
+  .pivot-text strong { font-weight: 600; }
+
+  /* ROLE BADGE */
+  .role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--success-bg);
+    color: var(--success);
+    border: 1px solid rgba(10,110,63,0.15);
+    border-radius: 99px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+  .role-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Portfolio — PM Case Study</div>
+  <div class="nav-links">
+    <a href="#background">背景</a>
+    <a href="#insight">洞察</a>
+    <a href="#decisions">決策</a>
+    <a href="#results">成果</a>
+    <a href="#reflection">反思</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="opacity:1;transform:none;border-bottom:1px solid var(--border)">
+  <div class="hero-eyebrow">Case Study · 電商 × CRM × 數據策略</div>
+  <h1 class="hero-title">
+    全聯電商 × LINE<br>
+    會員數據<em>閉環</em>
+  </h1>
+  <p class="hero-sub">
+    在資源有限、系統分散的限制下，重新定義綁定路徑，四個月將 LINE 好友綁定率從 13% 成長至 42%，建立全聯電商首個可規模化的精準再行銷基礎建設。
+  </p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">角色</div>
+      <div class="hero-meta-value">PO（Product Owner）</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">時間軸</div>
+      <div class="hero-meta-value">2026 Q1–Q2</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">核心成果</div>
+      <div class="hero-meta-value">綁定率 13% → 42%</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">營收成長</div>
+      <div class="hero-meta-value">年貨大街 20×</div>
+    </div>
+  </div>
+  <div class="hero-bg-number">42%</div>
+</section>
+
+<!-- BACKGROUND -->
+<section id="background">
+  <div class="section-label">01 — 背景與挑戰</div>
+  <div class="two-col">
+    <div>
+      <h2 class="section-title">數據孤島，推播失效</h2>
+      <p class="body-text">
+        全聯全電商 LINE 官方帳號是連結線上流量與線下實體消費的關鍵橋樑。然而在專案啟動前，LINE 好友數與電商 App 會員（MID）之間存在嚴重的 <strong>Data Silo</strong>——兩個系統各自為政。
+      </p>
+      <p class="body-text">
+        推播訊息無法依消費行為個人化，導致轉換率低、封鎖率高，大量行銷預算在「廣播式推播」中被稀釋。
+      </p>
+      <div style="margin-top:24px">
+        <span class="tag">LID Mapping</span>
+        <span class="tag">Data Silo</span>
+        <span class="tag">LINE OA</span>
+        <span class="tag">PXPAY</span>
+        <span class="tag">跨部門協作</span>
+      </div>
+    </div>
+    <div>
+      <div class="insight-box">
+        <div class="insight-tag">核心挑戰</div>
+        <p>外部 LINE 標籤與內部交易數據無法串接，推播就像對著空氣說話——我們知道有人在，但不知道他是誰。</p>
+      </div>
+      <div style="margin-top:16px">
+        <div class="role-badge">
+          <div class="role-dot"></div>
+          我的角色：PO — 定義 What & Why
+        </div>
+        <p class="body-text" style="margin:0;font-size:14px">
+          IT 夥伴擔任 Scrum Master，負責 How & Process。明確的職能分工讓我可以專注在需求定義、優先級排序與跨部門溝通（IT、行銷、外部廠商 MAAC）。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHT -->
+<section id="insight">
+  <div class="section-label">02 — 洞察與策略轉折</div>
+  <h2 class="section-title">問題不在哪裡，<br>才是真正的洞察</h2>
+
+  <div class="pivot-callout">
+    <div class="pivot-icon">數據洞察</div>
+    <div class="pivot-text">
+      透過分析非貼圖宣傳期的好友來源，發現<strong>多數新加入者其實來自 App 導流</strong>——他們本來就是既有會員，已有 MID，根本不需要重新註冊。
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:40px">
+    <div>
+      <div class="decision-card" style="border-left:4px solid #e74c3c;border-radius:0 12px 12px 0">
+        <div class="decision-num" style="color:#e74c3c">原本的假設 ✗</div>
+        <div class="decision-title">所有好友都需要走完整的「下載 App → 註冊 PXPAY」流程</div>
+        <div class="decision-body">這個預設讓「New-New」新用戶門檻過高，轉換漏斗在第一步就嚴重流失。</div>
+      </div>
+    </div>
+    <div>
+      <div class="decision-card" style="border-left:4px solid var(--accent);border-radius:0 12px 12px 0">
+        <div class="decision-num">重新定義後的問題 ✓</div>
+        <div class="decision-title">如何讓既有 App 會員以最低摩擦完成 LID ↔ MID 的一次性對應？</div>
+        <div class="decision-body">這群人有 MID，只需「單點驗證」即可立刻產生數據價值，不需要走完整註冊流程。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pivot-callout" style="margin-top:24px;border-left-color:#0a6e3f;background:var(--success-bg)">
+    <div class="pivot-icon" style="background:#0a6e3f">策略 Pivot</div>
+    <div class="pivot-text">
+      從「拉新」轉向「盤活既有」。<strong>一個有 MID 的綁定會員，數據價值遠高於十個無法識別的匿名好友。</strong>Quality 比 Quantity 更重要。
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+    <div class="timeline-phase">
+      <div class="phase-label">Phase 1 — 421 前</div>
+      <div class="phase-name">基礎建設期</div>
+      <div class="phase-item key">與 IT 溝通需求，開 Redmine 單</div>
+      <div class="phase-item">Mini App 取得權限</div>
+      <div class="phase-item">規劃 App→LINE 跳轉授權機制</div>
+    </div>
+    <div class="timeline-phase">
+      <div class="phase-label">Phase 2 — 421 全電商 App 上線</div>
+      <div class="phase-name">MVP 驗證期</div>
+      <div class="phase-item key">以 BN 教學引導方式上線</div>
+      <div class="phase-item">IT 團隊完成測試</div>
+      <div class="phase-item">Mini App 凸版位曝光</div>
+    </div>
+    <div class="timeline-phase">
+      <div class="phase-label">Phase 3 — 618 前導</div>
+      <div class="phase-name highlight">🎯 One-Click Binding</div>
+      <div class="phase-item key">App→LINE 一點就綁，無痛直覺</div>
+      <div class="phase-item key">Mini App MGM 同步推進</div>
+      <div class="phase-item key">流量 ++ 業績 ++</div>
+    </div>
+  </div>
+</section>
+
+<!-- DECISIONS -->
+<section id="decisions">
+  <div class="section-label">03 — 關鍵決策與取捨</div>
+  <div class="two-col">
+    <div>
+      <h2 class="section-title">四個決定<br>改變了結果</h2>
+      <p class="body-text">每個決策背後都有一個取捨——我選擇記錄下來，因為這才是 PM 工作真正發生的地方。</p>
+    </div>
+    <div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px">
+    <div class="decision-card">
+      <div class="decision-num">決策 01</div>
+      <div class="decision-title">後台模組化（Feature Modularization）</div>
+      <div class="decision-body">在全電商後台新增「綁定組件區域」，不做一次性活動頁，而是建立可複用模組。</div>
+      <div class="pm-thinking">
+        <strong>PM Thinking</strong>
+        短期多花了開發工時，但讓後續每次檔期的綁定功能嵌入從「兩週開發」縮短成「兩天設定」。說服 IT 夥伴的關鍵論點：「618、雙 11 都會需要，這次做一次就夠了。」
+      </div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-num">決策 02</div>
+      <div class="decision-title">誘因設計（Incentive Design）</div>
+      <div class="decision-body">向內部爭取「LINE 好友專屬折扣預算」，用折扣作為 hook 驅動 App → LINE 的轉換。</div>
+      <div class="pm-thinking">
+        <strong>PM Thinking</strong>
+        透過「價值交換」讓行為轉換變得理所當然。用戶不是沒有動機，而是需要一個夠清楚的理由。在資源受限下，折扣是最直接的槓桿。
+      </div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-num">決策 03</div>
+      <div class="decision-title">MVP 分階段上線</div>
+      <div class="decision-body">將目標依電商檔期拆分為三個 Phase，每個里程碑都有可驗證的成果，避免一次上大功能的風險。</div>
+      <div class="pm-thinking">
+        <strong>PM Thinking</strong>
+        有明確的檔期壓力反而是優勢——421 是第一個 checkpoint，逼著我們把 MVP 範圍定清楚，而不是無限期優化。
+      </div>
+    </div>
+
+    <div class="decision-card">
+      <div class="decision-num">決策 04</div>
+      <div class="decision-title">One-Click Binding 技術優化</div>
+      <div class="decision-body">與 IT 協作優化 OAuth 授權機制，讓用戶從 App 點擊後無需重複輸入帳密，直接完成 LID × MID Mapping。</div>
+      <div class="pm-thinking">
+        <strong>PM Thinking</strong>
+        Friction 比 Incentive 更重要。減少一個步驟，往往比增加一個誘因更有效。這個洞察改變了我看待用戶轉換的方式。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="section-label">04 — 量化成果</div>
+  <h2 class="section-title">數字說話</h2>
+
+  <div class="metrics-grid">
+    <div class="metric-card highlight">
+      <div class="metric-num">42%</div>
+      <div class="metric-label">最終綁定率<br>（從 13% 成長）</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">7×</div>
+      <div class="metric-label">絕對綁定人數成長<br>（4個月）</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">20×</div>
+      <div class="metric-label">年貨大街<br>營收成長</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <p class="body-text">
+        關鍵在於：<strong>好友數同期成長 2.3 倍（62K → 141K）的情況下，綁定率仍然持續提升。</strong>
+        這說明成果不只是流量自然增長，路徑優化是真實有效的。
+      </p>
+      <p class="body-text" style="font-size:14px;color:var(--muted)">
+        單月營收突破 460 萬 ／ 標籤策略讓選品效率提升 90% ／ 建立標準化數據行銷 SOP，降低營運手動作業成本
+      </p>
+    </div>
+    <div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>月份</th>
+            <th>好友數</th>
+            <th>綁定率</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2026/01</td>
+            <td>62,438</td>
+            <td>
+              <div class="rate-bar-wrap">
+                <div class="rate-bar"><div class="rate-fill" style="width:13%"></div></div>
+                <span class="rate-text">13%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2026/02</td>
+            <td>104,148</td>
+            <td>
+              <div class="rate-bar-wrap">
+                <div class="rate-bar"><div class="rate-fill" style="width:19%"></div></div>
+                <span class="rate-text">19%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2026/03</td>
+            <td>111,761</td>
+            <td>
+              <div class="rate-bar-wrap">
+                <div class="rate-bar"><div class="rate-fill" style="width:24%"></div></div>
+                <span class="rate-text">24%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2026/04</td>
+            <td>124,198</td>
+            <td>
+              <div class="rate-bar-wrap">
+                <div class="rate-bar"><div class="rate-fill" style="width:32%"></div></div>
+                <span class="rate-text">32%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2026/05</td>
+            <td>140,982</td>
+            <td>
+              <div class="rate-bar-wrap">
+                <div class="rate-bar"><div class="rate-fill" style="width:42%"></div></div>
+                <span class="rate-text">42%</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Q&A -->
+<section>
+  <div class="section-label">05 — 面試官追問與回答方向</div>
+  <h2 class="section-title">預備三個<br>最難的問題</h2>
+
+  <div class="qa-item">
+    <div class="qa-q">
+      <span>Q1</span>你說「重新定義問題」，但一開始你怎麼說服團隊改方向的？
+    </div>
+    <div class="qa-a">
+      用數據說話，而不是直覺。我把非貼圖期的好友來源分析拉出來，讓數字先說話——X% 的新加入者來自 App 導流，這群人根本不需要走新人流程。當大家看到這個數字，共識就自然形成了。阻力主要來自 IT 排程與資安規範，我的做法是用 MVP 拆分降低一次性風險，讓第一個 Phase 盡量輕量可驗證。
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">
+      <span>Q2</span>這個成長有多少是你的策略貢獻，有多少是檔期自然流量帶動的？
+    </div>
+    <div class="qa-a">
+      這是一個好問題，我需要誠實拆分：好友數的成長確實有活動曝光的自然效果。但關鍵在於，<strong>在好友數同步擴大的情況下，綁定率仍然從 13% 提升到 42%</strong>——這個「率」的提升是路徑優化的真實信號，而不只是分子變大。如果要更嚴謹驗證，下次我會設計 A/B test，對照有無一鍵綁定的轉換差異。
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q">
+      <span>Q3</span>你說建立了「可複用模組」，短期代價是什麼？後來真的有被複用嗎？
+    </div>
+    <div class="qa-a">
+      短期多花了約 [待補] 個工作天的開發工時，且佔用了 IT 在 421 前的排程。這個 trade-off 我在提案時就坦白說了，並用「長期節省成本」的邏輯說服夥伴。後續的活動是否已複用此模組，這是我持續追蹤的北極星指標，預計 618 活動頁是第一個完整驗證點。
+    </div>
+  </div>
+</section>
+
+<!-- REFLECTION -->
+<section id="reflection">
+  <div class="section-label">06 — 反思</div>
+  <div class="two-col">
+    <div>
+      <h2 class="section-title">最大的收穫<br>不是那個數字</h2>
+    </div>
+    <div>
+      <p class="reflection-body">
+        這段經歷讓我確認，自己想做的不只是「推動活動成效」，而是更前端地參與產品策略與使用者流程設計。
+      </p>
+      <br>
+      <p class="reflection-body">
+        最有成就感的，不是最終的數字成長，而是<em>把原本混亂、模糊的目標重新整理成可以被執行的流程</em>，並在大量限制下找到真正能落地的方法。
+      </p>
+      <br>
+      <p class="reflection-body">
+        這段經驗讓我重新理解一件事：<em>Friction 比 Incentive 更重要。</em>使用者不是沒有需求，而是流程中的阻力太多、理解成本太高。
+      </p>
+      <br>
+      <p class="body-text" style="color:var(--muted);font-size:14px;margin-top:8px">
+        我喜歡在混亂中找結構、從使用者行為中找問題，並透過跨部門協作一步步把事情推動落地。這段經驗讓我更確定自己想往 Product Manager 方向發展。
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-text">PX Mart E-commerce × LINE · PM Portfolio Case Study</div>
+  <a href="#" class="back-top">↑ Back to top</a>
+</footer>
+
+<script>
+  // Scroll reveal
+  const sections = document.querySelectorAll('section:not(.hero)');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+  sections.forEach(s => observer.observe(s));
+
+  // Animate rate bars on scroll
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.rate-fill').forEach(bar => {
+          bar.style.width = bar.style.width;
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('table').forEach(t => barObserver.observe(t));
+</script>
+</body>
+</html>
