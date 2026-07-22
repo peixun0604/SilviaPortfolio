@@ -75,7 +75,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "伺服器尚未設定 GEMINI_API_KEY" });
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${API_KEY}`;
 
     const payload = {
       system_instruction: { parts: [{ text: systemPrompt }] },
@@ -92,7 +92,7 @@ export default async function handler(req, res) {
 
     if (!geminiRes.ok) {
       console.error("Gemini API error:", data);
-      return res.status(502).json({ error: "Gemini 回傳錯誤", status: geminiRes.status, detail: data });
+      return res.status(502).json({ error: "Gemini 回傳錯誤" });
     }
 
     const reply =
