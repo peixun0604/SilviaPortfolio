@@ -92,7 +92,7 @@ export default async function handler(req, res) {
 
     if (!geminiRes.ok) {
       console.error("Gemini API error:", data);
-      return res.status(502).json({ error: "Gemini 回傳錯誤" });
+      return res.status(502).json({ error: "Gemini 回傳錯誤", status: geminiRes.status, detail: data });
     }
 
     const reply =
