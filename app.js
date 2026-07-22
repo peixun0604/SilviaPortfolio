@@ -38,6 +38,9 @@ const CHAT_BTNS = [
 const BIO = "Silvia Yang，產品/成長/體驗設計背景。現任全聯全電商數據行銷專員，以 Product Owner 角色 0→1 建置 LINE 生態系會員數據閉環，讓 LINE 渠道收益從 360 萬成長到 3000 萬、綁定率從 13% 提升到 42%。曾在 take! Martech 做 B2B 行銷企劃（KOC 口碑、Sales Kit），在 Traiwan 做旅宿 SaaS 的 UIUX 設計與 PRD。擅長把模糊需求定義成問題、跨團隊協調、用數據驗證。個性好奇、愛觀察人、喜歡把混亂整理清楚，下班會運動打沙包紓壓。擁有 Google AI Essentials、紅點設計概念獎入圍、IPAS 色彩規劃管理師。";
 const FALLBACK_REPLY = "這題可能交給 Silvia 本人回答最準 🙂\n👉 sy.peix@gmail.com";
 
+// 自由輸入問答會呼叫的後端 proxy（金鑰藏在 Vercel，前端看不到）
+const PROXY_URL = "https://silvia-portfolio-eight.vercel.app/api/chat";
+
 const PROJECTS = [
   {
     meta: "2026 · Product Owner",
@@ -178,14 +181,18 @@ function setControls(on) {
 // free-input: Claude in preview, canned fallback when unavailable (e.g. GitHub Pages)
 function aiAnswer(q) {
   return async () => {
-    if (window.claude && typeof window.claude.complete === "function") {
-      const prompt =
-        "你是 Silvia 的朋友，用輕鬆自然的第一人稱（我）代替她回答訪客的問題，風格親切、口語、不正式，使用繁體中文，控制在 2–4 句。\n\n" +
-        "關於 Silvia：" + BIO + "\n\n訪客問：「" + q + "」\n\n用 Silvia 的第一人稱回答：";
-      const text = await window.claude.complete(prompt);
-      return (text || "").trim() || FALLBACK_REPLY;
+    try {
+      const res = await fetch(PROXY_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: q }),
+      });
+      const data = await res.json();
+      if (!res.ok) return FALLBACK_REPLY;
+      return (data.reply || "").trim() || FALLBACK_REPLY;
+    } catch (e) {
+      return FALLBACK_REPLY;
     }
-    return FALLBACK_REPLY;
   };
 }
 
