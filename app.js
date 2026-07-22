@@ -48,7 +48,7 @@ const PROJECTS = [
     lede: "從會員行為數據找到切入點，<br/>重新定義 TA、設計階段性低摩擦路徑。",
     metric: { label: "Binding Rate", from: "13%", to: "42%", sub: "· 4 months" },
     art: "assets/cover-1.svg",
-    link: "case-px/PX Case Study.html",
+    link: "case-px/px-case-study.html",
   },
   {
     meta: "2023–2024 · Marketing",
