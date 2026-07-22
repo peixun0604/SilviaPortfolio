@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全聯電商 × LINE 會員數據閉環 — Silvia's Portfolio</title>
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Plus Jakarta Sans', 'Noto Sans TC', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        },
+        colors: {
+          canvas: '#F4F6F5',        /* Soft warm light gray background */
+          primaryDark: '#372C32',   /* Deep warm charcoal */
+          neutralGray: '#D6DDD8',   /* Minimalist greenish light gray */
+          accentBlue: '#2961D9',    /* Klein Blue accent color */
+          highlightNeon: '#E9FCBF', /* Fluorescent neon yellow-green */
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body {
+    background-color: #F4F6F5;
+    color: #372C32;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fine-border {
+    border: 1px solid #D6DDD8;
+  }
+  .focus-glow:hover {
+    border-color: #2961D9;
+    box-shadow: 0 4px 20px rgba(41, 97, 217, 0.08);
+  }
+  
+  /* Glass sphere gradient and shadow effects */
+  .glass-sphere {
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(41, 97, 217, 0.15) 70%, rgba(41, 97, 217, 0.35) 100%);
+    box-shadow: 0 10px 30px -5px rgba(41, 97, 217, 0.25), inset 0 0 15px rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+  }
+  .glass-sphere-hero {
+    background: radial-gradient(circle at 30% 30%, rgba(233, 252, 191, 0.95), rgba(41, 97, 217, 0.4) 75%, rgba(55, 44, 50, 0.8) 100%);
+    box-shadow: 0 12px 35px -5px rgba(41, 97, 217, 0.35), inset 0 0 20px rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+  }
+
+  /* Keyframe animations for micro-interaction floating spheres */
+  @keyframes floatSphere {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+  .animate-float-1 { animation: floatSphere 3.6s ease-in-out infinite; }
+  .animate-float-2 { animation: floatSphere 4.2s ease-in-out infinite 0.6s; }
+  .animate-float-3 { animation: floatSphere 3.8s ease-in-out infinite 1.2s; }
+
+  /* Custom CSS for Spotlight Transition */
+  .spotlight-cone {
+    background: linear-gradient(180deg, rgba(233, 252, 191, 0.8) 0%, rgba(233, 252, 191, 0.1) 60%, transparent 100%);
+    clip-path: polygon(45% 0, 55% 0, 100% 100%, 0% 100%);
+  }
+
+  /* Waveform animation for TTS player */
+  @keyframes pulseWave {
+    0%, 100% { height: 6px; }
+    50% { height: 22px; }
+  }
+  .animate-wave-1 { animation: pulseWave 1s ease-in-out infinite 0.1s; }
+  .animate-wave-2 { animation: pulseWave 1s ease-in-out infinite 0.25s; }
+  .animate-wave-3 { animation: pulseWave 1s ease-in-out infinite 0.4s; }
+  .animate-wave-4 { animation: pulseWave 1s ease-in-out infinite 0.15s; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body class="font-sans antialiased selection:bg-accentBlue selection:text-white text-base md:text-lg leading-relaxed">
+
+<!-- TOP NAV -->
+<nav class="fixed top-0 left-0 right-0 z-40 bg-canvas/90 backdrop-blur-md border-b border-neutralGray">
+  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="#" class="text-xs font-bold tracking-wider text-primaryDark hover:text-accentBlue transition-colors uppercase flex items-center gap-2">
+      <span>Silvia's Portfolio</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO SECTION -->
+<header class="relative pt-32 pb-20 overflow-hidden border-b border-neutralGray">
+  <div class="max-w-6xl mx-auto px-6 relative z-10 text-left">
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+      <span class="text-xs font-mono tracking-widest text-accentBlue uppercase">Case Study</span>
+    </div>
+    
+    <h1 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-primaryDark mb-6">
+      翻轉既有漏斗迷思：<br>
+      <span class="text-accentBlue">以 One-Click 串接解鎖 1,300 萬會員數據閉環</span>
+    </h1>
+    <p class="text-lg md:text-xl text-primaryDark/80 font-normal leading-relaxed mb-8 max-w-3xl">
+      核心洞察——「如果用戶已經存在，為什麼 User Flow 還在假設他們是新客？」大家都認為是因為流程說明的不清楚；但真正的痛點，過於繁瑣的 user flow。
+    </p>
+    <div class="p-6 rounded-lg bg-white fine-border backdrop-blur mb-12">
+      <p class="text-sm italic text-primaryDark/70 font-mono">
+        "Sometimes the best product decision isn't improving the funnel. It's realizing you're solving the wrong problem."
+      </p>
+    </div>
+    
+    <!-- METADATA GRID -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-neutralGray">
+      <div>
+        <div class="text-xs text-primaryDark/60 font-mono mb-1">Role</div>
+        <div class="text-base font-bold text-primaryDark">Product Owner</div>
+      </div>
+      <div>
+        <div class="text-xs text-primaryDark/60 font-mono mb-1">Timeline</div>
+        <div class="text-base font-bold text-primaryDark font-mono">2026 Q1 - Q2</div>
+      </div>
+      <div>
+        <div class="text-xs text-primaryDark/60 font-mono mb-1">Scope</div>
+        <div class="text-base font-bold text-primaryDark">LINE OA × PXPay × CRM</div>
+      </div>
+      <div>
+        <div class="text-xs text-primaryDark/60 font-mono mb-1">Core Impact</div>
+        <div class="text-base font-bold text-accentBlue">Binding Rate 13% → 42%</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- THE OVERVIEW: CORE CHALLENGE & ROLE -->
+<section class="py-20 border-b border-neutralGray bg-white/20">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-8">
+      <span class="text-xs font-mono text-primaryDark/60 uppercase">00</span>
+      <div class="h-[1px] w-8 bg-neutralGray"></div>
+      <span class="text-xs font-mono text-accentBlue">The Overview</span>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+      <!-- Left Column: Core Challenge -->
+      <div class="p-8 rounded-xl bg-white fine-border relative flex flex-col justify-between">
+        <div>
+          <span class="text-[10px] font-mono px-2.5 py-1 rounded bg-highlightNeon text-primaryDark font-bold mb-4 inline-block tracking-wider">THE CORE CHALLENGE</span>
+          <h3 class="text-2xl md:text-3xl font-black text-primaryDark leading-tight mt-2">
+            缺乏 <span class="text-accentBlue">OMO 數據串接</span>，<br>停留在全量盲推。
+          </h3>
+        </div>
+      </div>
+
+      <!-- Right Column: My Role -->
+      <div class="p-8 rounded-xl bg-white fine-border relative flex flex-col justify-between">
+        <div>
+          <span class="text-[10px] font-mono px-2.5 py-1 rounded bg-accentBlue/10 text-accentBlue font-bold mb-4 inline-block tracking-wider">MY ROLE</span>
+          <h3 class="text-xl md:text-2xl font-bold text-primaryDark mb-4 leading-snug">
+            我在團隊中的角色 ｜ <br class="hidden md:inline">定義 What & Why
+          </h3>
+          <ul class="space-y-3 text-sm md:text-base text-primaryDark/80">
+            <li class="flex items-start gap-2">
+              <span class="font-bold text-accentBlue font-mono">•</span>
+              <span><strong>潛在需求定義與商業目標對齊</strong></span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="font-bold text-accentBlue font-mono">•</span>
+              <span><strong>產品功能優先級排序</strong></span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="font-bold text-accentBlue font-mono">•</span>
+              <span><strong>跨部門與外部廠商（MAAC / IT / 行銷）協調推進</strong></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Goal Banner -->
+    <div class="p-6 rounded-xl bg-highlightNeon/40 fine-border mb-8">
+      <div class="text-xs font-mono font-bold text-accentBlue uppercase tracking-wider mb-2">專案目標</div>
+      <p class="text-base md:text-lg font-bold text-primaryDark leading-relaxed">
+        提高 LID ⇄ MID 會員綁定率，解鎖全通路消費數據，為集團建立關鍵的精準行銷數據資產。
+      </p>
+    </div>
+
+    <!-- DATA SILO DIAGRAM -->
+    <div class="p-8 rounded-xl bg-white fine-border">
+      <h4 class="text-sm font-mono text-primaryDark/50 uppercase tracking-widest text-center mb-6">數據斷聯現狀 ｜ OMO Data Silo Topology</h4>
+      <div class="flex flex-col md:flex-row items-center justify-around gap-6 relative">
+        <div class="text-center p-4 rounded bg-canvas fine-border w-full md:w-1/3">
+          <div class="text-xs font-mono text-accentBlue mb-1">外部 LINE OA 渠道</div>
+          <div class="text-lg font-black text-primaryDark">識別代碼：LID</div>
+          <div class="text-xs text-primaryDark/60 font-mono mt-1">（匿名流量）</div>
+        </div>
+        
+        <div class="flex flex-col items-center justify-center text-rose-500 py-4">
+          <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          <div class="text-[10px] font-mono uppercase tracking-wider text-primaryDark/50 font-bold">無法跨系統 Mapping</div>
+        </div>
+
+        <div class="text-center p-4 rounded bg-canvas fine-border w-full md:w-1/3">
+          <div class="text-xs font-mono text-accentBlue mb-1">內部 PXPay 會員系統</div>
+          <div class="text-lg font-black text-primaryDark">識別代碼：MID</div>
+          <div class="text-xs text-primaryDark/60 font-mono mt-1">（實名交易數據）</div>
+        </div>
+      </div>
+      <div class="mt-6 pt-4 border-t border-neutralGray text-center">
+        <span class="inline-block px-3 py-1 rounded bg-highlightNeon/50 text-primaryDark text-xs font-mono font-bold uppercase tracking-wider">
+          終極願景：解鎖全通路（OMO）線上下真實消費記錄
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE SITUATION -->
+<section class="py-20 border-b border-neutralGray">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-xs font-mono text-primaryDark/60 uppercase">01</span>
+      <div class="h-[1px] w-8 bg-neutralGray"></div>
+      <span class="text-xs font-mono text-accentBlue">The Situation</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl font-bold font-mono text-primaryDark mb-8">What exactly were we trying to solve?</h2>
+    
+    <!-- 01 The Situation — Problem -> Goal comparison (Option B) -->
+    <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-stretch gap-4 mb-4">
+      <div class="p-6 rounded-xl bg-canvas fine-border">
+        <div class="text-[11px] font-mono text-rose-500 font-bold uppercase tracking-wider mb-4">⚠️ 現狀痛點 · Baseline</div>
+        <ul class="space-y-3 text-base text-primaryDark/85 leading-relaxed">
+          <li>匿名流量 &amp; 數據孤島（LID／MID 未串接）</li>
+          <li>全量盲推 → 導致高用戶封鎖率</li>
+          <li>綁定率死卡在 <strong class="text-primaryDark">13%</strong></li>
+        </ul>
+      </div>
+      <div class="flex items-center justify-center text-accentBlue py-2 rotate-90 md:rotate-0">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </div>
+      <div class="p-6 rounded-xl bg-accentBlue/5 border border-accentBlue/30">
+        <div class="text-[11px] font-mono text-accentBlue font-bold uppercase tracking-wider mb-4">🚀 轉折契機 · Turning Point</div>
+        <ul class="space-y-3 text-base text-primaryDark/85 leading-relaxed">
+          <li>從 0 到 1 串接 <strong class="text-primaryDark">LID ⇄ MID</strong></li>
+          <li>打破微調迷思，重新設定策略</li>
+          <li>目標：解鎖數據標籤與自動化行銷</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- METRICS COMPARISON -->
+    <div class="mt-12 p-8 rounded-xl bg-white fine-border flex flex-col md:flex-row items-center justify-around gap-8 text-center">
+      <div class="space-y-2">
+        <div class="text-xs font-mono text-primaryDark/60 uppercase tracking-wider">龐大的會員基數</div>
+        <div class="text-4xl md:text-5xl font-black text-accentBlue">1,300 萬+</div>
+        <div class="text-base text-primaryDark/70">全聯既有 PXPay 會員數</div>
+      </div>
+      <div class="h-12 w-[1px] bg-neutralGray hidden md:block"></div>
+      <div class="space-y-2">
+        <div class="text-xs font-mono text-primaryDark/60 uppercase tracking-wider">極窄的轉換出口</div>
+        <div class="text-4xl md:text-5xl font-black text-accentBlue/80">13%</div>
+        <div class="text-base text-primaryDark/70">專案啟動前的好友綁定率</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOMETHING FELT WRONG: REBUILT WITH MICRO-INTERACTION FLOATING SPHERES -->
+<section class="py-20 border-b border-neutralGray bg-white/40 relative overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-xs font-mono text-primaryDark/60 uppercase">02</span>
+      <div class="h-[1px] w-8 bg-neutralGray"></div>
+      <span class="text-xs font-mono text-accentBlue">Something Felt Wrong</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl font-bold font-mono text-primaryDark mb-4">What if the problem wasn't the flow?</h2>
+    <p class="text-base md:text-lg text-primaryDark/80 mb-16 max-w-3xl">
+      路跑現場實測：我們以為是引導不清晰，現場才發現是「雙新用戶（New-New）」的註冊阻力過高。
+    </p>
+
+    <!-- SEAMLESS INFOGRAPHIC CONTAINER (No outer borders, full-width feel) -->
+    <div class="relative w-full flex flex-col items-center">
+      
+      <!-- Top Title Tag -->
+      <div class="w-full flex items-center justify-between border-b border-neutralGray/60 pb-4 mb-16">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-accentBlue"></span>
+          <span class="text-xs font-mono font-bold tracking-widest text-primaryDark/70 uppercase">0.2 現場轉換阻力架構剖析 ｜ User Behavior Topology</span>
+        </div>
+        <span class="text-[10px] font-mono px-2.5 py-1 rounded bg-accentBlue/10 text-accentBlue font-bold border border-accentBlue/20">FIELD OBSERVATION</span>
+      </div>
+
+      <!-- SPHERES & CARDS ROW (No Overlap with Dome) -->
+      <div class="relative w-full flex flex-col md:flex-row justify-center items-start gap-6 md:gap-12 z-20 mb-16">
+        
+        <!-- Subtle Horizontal Dashed Line (Desktop only) -->
+        <div class="hidden md:block absolute top-[64px] left-[15%] right-[15%] h-px border-t-[1.5px] border-dashed border-accentBlue/30 -z-10"></div>
+
+        <!-- Sphere 01 -->
+        <div class="flex-1 flex flex-col items-center text-center group cursor-pointer w-full">
+          <div class="w-32 h-32 rounded-full glass-sphere fine-border flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg mb-6 relative animate-float-1 z-10 bg-white/50">
+            <span class="text-xl font-black text-primaryDark group-hover:text-accentBlue transition-colors">猶豫</span>
+            <span class="text-[9px] font-mono text-accentBlue font-bold uppercase tracking-wider">Hesitation</span>
+          </div>
+          <div class="p-4 bg-white/95 fine-border rounded-xl shadow-lg w-full max-w-[260px] text-left transition-all duration-300 transform opacity-40 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 backdrop-blur-md">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-mono text-accentBlue font-bold">BEHAVIOR 01</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-highlightNeon text-primaryDark font-bold">現場焦慮</span>
+            </div>
+            <p class="text-sm font-bold text-primaryDark leading-snug">
+              滑到「填寫完整會員資料」頁面 ➔ 瞬間猶豫停頓。
+            </p>
+          </div>
+        </div>
+
+        <!-- Sphere 02 -->
+        <div class="flex-1 flex flex-col items-center text-center group cursor-pointer w-full md:-translate-y-8 mt-8 md:mt-0">
+          <div class="w-32 h-32 rounded-full glass-sphere fine-border flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg mb-6 relative animate-float-2 z-10 bg-white/50">
+            <span class="text-xl font-black text-primaryDark group-hover:text-accentBlue transition-colors">流失</span>
+            <span class="text-[9px] font-mono text-accentBlue font-bold uppercase tracking-wider">Abandonment</span>
+          </div>
+          <div class="p-4 bg-white/95 fine-border rounded-xl shadow-lg w-full max-w-[260px] text-left transition-all duration-300 transform opacity-40 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 backdrop-blur-md">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-mono text-accentBlue font-bold">BEHAVIOR 02</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-canvas border border-neutralGray text-primaryDark font-bold">放棄操作</span>
+            </div>
+            <p class="text-sm font-bold text-primaryDark leading-snug">
+              滿頭大汗的跑者 ➔ 直接收起手機，放棄拿贈品退出隊伍。
+            </p>
+          </div>
+        </div>
+
+        <!-- Sphere 03 (Unified visual style) -->
+        <div class="flex-1 flex flex-col items-center text-center group cursor-pointer w-full mt-8 md:mt-0">
+          <div class="w-32 h-32 rounded-full glass-sphere fine-border flex flex-col items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg mb-6 relative animate-float-3 z-10 bg-white/50">
+            <span class="text-xl font-black text-primaryDark group-hover:text-accentBlue transition-colors">門檻</span>
+            <span class="text-[9px] font-mono text-accentBlue font-bold uppercase tracking-wider">High Barrier</span>
+          </div>
+          <div class="p-4 bg-white/95 fine-border rounded-xl shadow-lg w-full max-w-[260px] text-left transition-all duration-300 transform opacity-40 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 backdrop-blur-md">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-mono text-accentBlue font-bold">BEHAVIOR 03</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-highlightNeon text-primaryDark font-bold">雙新用戶門檻</span>
+            </div>
+            <p class="text-sm font-bold text-primaryDark leading-snug">
+              對非會員（New-New）而言，現場「繁瑣註冊流程」是無法跨越的轉換阻力。
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- DOME (Arc containing the UX Insight Text) -->
+      <div class="w-full max-w-[800px] mx-auto md:aspect-[2/1] rounded-t-[3rem] md:rounded-t-full bg-gradient-to-t from-accentBlue/15 via-accentBlue/5 to-transparent border-t-2 border-accentBlue/20 flex flex-col items-center justify-start pt-12 md:pt-16 px-6 md:px-20 text-center relative overflow-hidden pb-12 md:pb-0 shadow-[inset_0_15px_30px_rgba(255,255,255,0.7)]">
+        <div class="w-2 h-2 rounded-full bg-accentBlue mb-4 animate-ping"></div>
+        <h3 class="text-xl md:text-2xl font-black text-primaryDark mb-4 tracking-widest font-mono">現場轉換阻力</h3>
+        <p class="text-sm md:text-base text-primaryDark/80 leading-relaxed font-medium relative z-10">
+          在匆忙的線下環境，用戶對個人隱私與繁複資料填寫有極高的心理防備。現場的微小贈品價值，根本無法擊穿用戶在嘈雜環境下對個資與安全警覺的隱私防線。我們必須降低綁定門檻，不是加強誘因。
+        </p>
+        <div class="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-white/60 to-transparent pointer-events-none"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FINDING THE REAL PROBLEM -->
+<section class="py-20 border-b border-neutralGray">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-xs font-mono text-primaryDark/60 uppercase">03</span>
+      <div class="h-[1px] w-8 bg-neutralGray"></div>
+      <span class="text-xs font-mono text-accentBlue">Finding the Real Problem</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl font-bold font-mono text-primaryDark mb-10">Why were existing members behaving like new users?</h2>
+
+    <!-- EVIDENCE CARDS GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <!-- Evidence 1 -->
+      <div class="p-6 rounded-xl bg-white fine-border flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-mono text-accentBlue font-bold">線索 01</span>
+            <span class="text-xs text-primaryDark/60 font-mono">App Store 2.6★</span>
+          </div>
+          <div class="p-4 rounded bg-canvas fine-border mb-4 text-xs font-mono text-primaryDark/70">
+            <div class="flex text-amber-500 mb-2 font-bold">★★☆☆☆</div>
+            <p class="text-primaryDark/90 italic mb-2">「下載註冊顯示身分證已註冊，我要怎麼弄，客服永遠忙線中……」</p>
+            <div class="border-t border-neutralGray pt-2 text-[10px] text-primaryDark/50">
+              官方回覆：「您可能曾用其他號碼註冊過 PXPAY 會員。」
+            </div>
+          </div>
+        </div>
+        <p class="text-base text-primaryDark/70 leading-relaxed">
+          系統強迫老朋友重新註冊，將已有 MID 的老會員拒之門外。
+        </p>
+      </div>
+
+      <!-- Evidence 2 -->
+      <div class="p-6 rounded-xl bg-white fine-border flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-mono text-accentBlue font-bold">線索 02</span>
+            <span class="text-xs text-accentBlue font-mono">客服剛需占 65%</span>
+          </div>
+          <div class="space-y-3 mb-4">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-primaryDark/70">物流/售後</span>
+                <span class="font-bold text-primaryDark">45%</span>
+              </div>
+              <div class="h-1.5 w-full bg-canvas rounded-full overflow-hidden">
+                <div class="h-full bg-accentBlue" style="width: 45%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-primaryDark/70">會員點數</span>
+                <span class="font-bold text-primaryDark">20%</span>
+              </div>
+              <div class="h-1.5 w-full bg-canvas rounded-full overflow-hidden">
+                <div class="h-full bg-primaryDark/40" style="width: 20%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-base text-primaryDark/70 leading-relaxed">
+          「出貨了嗎」「點數何時給」是最強剛需，這些功能卻被鎖在綁定流程外。
+        </p>
+      </div>
+
+      <!-- Evidence 3 -->
+      <div class="p-6 rounded-xl bg-white fine-border flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-mono text-accentBlue font-bold">線索 03</span>
+            <span class="text-xs text-primaryDark/60 font-mono">App 自帶流量</span>
+          </div>
+          <div class="p-4 rounded bg-canvas fine-border mb-4 text-center">
+            <div class="text-3xl font-black text-accentBlue font-mono">78%</div>
+            <div class="text-[10px] text-primaryDark/50 mt-1 font-mono">好友來源來自既有 App 導流</div>
+          </div>
+        </div>
+        <p class="text-base text-primaryDark/70 leading-relaxed">
+          數據顯示非推廣期的新好友多數已是 App 會員，我們卻一直在要求老會員重新填寫個資。
+        </p>
+      </div>
+    </div>
+
+    <!-- STRATEGIC PIVOT -->
+    <div class="border-t border-neutralGray pt-10 text-center">
+      <div class="text-xs font-mono text-accentBlue tracking-widest uppercase mb-4">戰略翻轉核心</div>
+      <p class="text-3xl font-black text-primaryDark tracking-tight">不要再讓會員重新註冊。</p>
+    </div>
+  </div>
+</section>
+
+<!-- THE DECISION & DIAGRAM 1 -->
+<section class="py-20 border-b border-neutralGray bg-white/40">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-xs font-mono text-primaryDark/60 uppercase">04</span>
+      <div class="h-[1px] w-8 bg-neutralGray"></div>
+      <span class="text-xs font-mono text-accentBlue">The Decision</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl font-bold font-mono text-primaryDark mb-8">What changed after redefining the problem?</h2>
+
+    <!-- DIAGRAM 1: USER FLOW COMPARISON (NO OUTER FRAME) -->
+    <div class="mb-12">
+      <h3 class="text-xl font-bold text-primaryDark mb-2">體驗策略：翻轉用戶旅程漏斗</h3>
+      <p class="text-sm text-primaryDark/60 mb-8">對照舊有「外部拉新」路徑與全新「盤活老客」路徑之結構摩擦力對比。</p>
+
+      <div class="space-y-12 relative">
+        <!-- OLD PATH -->
+        <div class="p-6 md:p-8 rounded-lg bg-white fine-border relative shadow-sm">
+          <span class="absolute -top-3 left-4 px-3 py-1 bg-white text-primaryDark/70 text-xs font-mono font-bold rounded-full border border-neutralGray shadow-sm">
+            舊路徑：以「拉新」為前提的阻力漏斗
+          </span>
+          
+          <!-- FLEX HORIZONTAL LAYOUT (Replaces Grid) -->
+          <div class="flex flex-col lg:flex-row items-center gap-3 lg:gap-4 mt-2">
+            <!-- Step 1 -->
+            <div class="flex-1 w-full p-4 bg-canvas fine-border rounded-lg text-center flex flex-col justify-center min-h-[90px]">
+              <div class="text-[10px] text-primaryDark/50 font-mono mb-1">01. 觸點</div>
+              <p class="text-sm font-bold text-primaryDark">加入 LINE 官方帳號</p>
+            </div>
+            
+            <!-- Arrow -->
+            <div class="hidden lg:block flex-none text-primaryDark/30">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+            <div class="lg:hidden block flex-none text-primaryDark/30 rotate-90 my-1">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="flex-1 w-full p-4 bg-canvas fine-border rounded-lg text-center flex flex-col justify-center min-h-[90px]">
+              <div class="text-[10px] text-primaryDark/50 font-mono mb-1">02. 行動</div>
+              <p class="text-sm font-bold text-primaryDark">點擊綁定 Banner</p>
+            </div>
+
+            <!-- Arrow -->
+            <div class="hidden lg:block flex-none text-primaryDark/30">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+            <div class="lg:hidden block flex-none text-primaryDark/30 rotate-90 my-1">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="flex-1 w-full p-4 bg-white border border-accentBlue rounded-lg text-center flex flex-col justify-center min-h-[90px] relative shadow-md">
+              <div class="text-[10px] text-accentBlue font-mono font-bold mb-1">03. 卡點</div>
+              <p class="text-sm font-bold text-primaryDark">網頁表單重新註冊</p>
+              <div class="text-[10px] text-primaryDark/60 mt-1">需手動輸入帳密與身分證</div>
+            </div>
+
+            <!-- Arrow with X -->
+            <div class="hidden lg:flex flex-col items-center justify-center flex-none text-rose-400 relative">
+              <div class="absolute -top-5 text-[10px] text-rose-500 font-mono font-bold whitespace-nowrap">X 大量流失</div>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </div>
+            <div class="lg:hidden flex flex-row gap-2 items-center justify-center flex-none text-rose-400 my-1">
+              <span class="text-[10px] text-rose-500 font-mono font-bold">X 大量流失</span>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="flex-1 w-full p-4 bg-canvas fine-border rounded-lg text-center flex flex-col justify-center min-h-[90px] opacity-40">
+              <div class="text-[10px] text-primaryDark/50 font-mono mb-1">04. 終點</div>
+              <p class="text-sm font-bold text-primaryDark">完成綁定</p>
+            </div>
+          </div>
+          
+          <div class="mt-6 p-3 bg-canvas fine-border rounded-lg text-xs md:text-sm text-primaryDark/70 leading-relaxed">
+            <strong>質性痛點：</strong>系統無法辨識既有會員，將「身分證已註冊」之老會員視為新客，造成高達 87% 的流程摩擦流失。
+          </div>
+        </div>
+
+        <!-- NEW PATH -->
+        <div class="p-6 md:p-8 rounded-lg bg-white border border-accentBlue/40 relative shadow-md">
+          <span class="absolute -top-3 left-4 px-3 py-1 bg-accentBlue text-white text-xs font-mono font-bold rounded-full border border-accentBlue/20 shadow-sm">
+            新路徑：以「盤活既有老會員」為核心的無痛漏斗
+          </span>
+          
+          <div class="flex flex-col lg:flex-row items-center gap-3 lg:gap-4 mt-2">
+            <!-- Step 1 -->
+            <div class="flex-1 w-full p-4 bg-canvas fine-border rounded-lg text-center flex flex-col justify-center min-h-[90px] relative">
+              <div class="text-[10px] text-accentBlue font-mono font-bold mb-1">01. 起點</div>
+              <p class="text-sm font-bold text-primaryDark">全聯 App (已有 MID)</p>
+              <div class="text-[9px] text-primaryDark/60 mt-1">從內部 1300萬會員導流</div>
+            </div>
+            
+            <!-- Arrow -->
+            <div class="hidden lg:block flex-none text-accentBlue">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+            <div class="lg:hidden block flex-none text-accentBlue rotate-90 my-1">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="flex-1 w-full p-4 bg-canvas fine-border rounded-lg text-center flex flex-col justify-center min-h-[90px]">
+              <div class="text-[10px] text-accentBlue font-mono font-bold mb-1">02. 觸發</div>
+              <p class="text-sm font-bold text-primaryDark">點擊 Banner 一點就綁</p>
+            </div>
+
+            <!-- Arrow -->
+            <div class="hidden lg:block flex-none text-accentBlue">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </div>
+            <div class="lg:hidden block flex-none text-accentBlue rotate-90 my-1">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <div class="mt-4 p-3 bg-canvas fine-border rounded text-xs text-primaryDark/70">
+            <strong>技術核心：</strong>透過 OAuth 授權機制於背景串接，直接在系統底層對齊 UID (LINE) 與 MID (PXPay)，將轉換路徑大幅精簡 60%。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPOTLIGHT TRANSITION (EUREKA MOMENT) -->
+    <div class="w-full flex flex-col items-center justify-start mt-24 mb-4">
+      <!-- Lamp SVG -->
+      <div class="relative z-20 flex flex-col items-center">
+        <div class="w-[2px] h-16 bg-primaryDark/80"></div>
+        <svg class="w-20 h-12 text-primaryDark" viewBox="0 0 100 60" fill="currentColor">
+          <path d="M45,0 L55,0 L55,10 L45,10 Z" />
+          <path d="M40,10 C40,10 60,10 60,10 C70,10 80,30 90,50 L10,50 C20,30 30,10 40,10 Z" />
+          <ellipse cx="50" cy="50" rx="40" ry="8" fill="#E9FCBF" />
+        </svg>
+      </div>
+
+      <!-- Beam = decorative background (clipped); insight text is a separate sibling on top, never clipped -->
+      <div class="relative w-full max-w-[760px] flex items-center justify-center px-6 pt-16 pb-8 -mt-1">
+        <div class="spotlight-cone pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 w-full h-[280px] z-0"></div>
+        <h3 class="relative z-10 text-xl md:text-2xl lg:text-3xl font-black text-primaryDark text-center tracking-tight leading-snug">
+          答案不是加碼誘因，也不是拉新客；<br>
+          <span class="text-accentBlue">而是降低 user flow 阻力，讓既有會員一鍵綁定。</span>
+        </h3>
+      </div>
+    </div>
+
+    <!-- Trade-offs section heading -->
+    <div class="flex items-center justify-center gap-3 mb-10">
+      <div class="h-px w-8 bg-neutralGray"></div>
+      <span class="px-3 py-1 rounded-full bg-canvas text-primaryDark text-[11px] font-mono font-bold tracking-widest uppercase border border-neutralGray">3 Key Trade-offs</span>
+      <div class="h-px w-8 bg-neutralGray"></div>
+    </div>
+
+    <!-- THREE REAL-WORLD DECISIONS (FRAMELESS LAYOUT) -->
+    <div class="space-y-16 relative z-30 pt-10">
+      
+      <!-- Decision 01 -->
+      <div class="flex flex-col md:flex-row gap-6 md:gap-12 relative group">
+        <div class="hidden md:block absolute left-[-16px] top-0 bottom-0 w-1 bg-transparent group-hover:bg-accentBlue transition-colors duration-300"></div>
+        <div class="md:w-1/3 shrink-0">
+          <span class="text-xs font-mono text-accentBlue font-bold tracking-widest mb-1 block uppercase">Decision 01</span>
+          <h3 class="text-2xl font-black text-primaryDark leading-tight">模組化，<br class="hidden md:block">還是快速上線？</h3>
+        </div>
+        <div class="md:w-2/3">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+            <div class="p-4 rounded-lg bg-canvas fine-border">
+              <div class="text-[10px] font-mono text-primaryDark/50 uppercase tracking-wider mb-2">衝突痛點</div>
+              <div class="text-2xl font-black text-primaryDark leading-none">2 週</div>
+              <p class="text-xs text-primaryDark/60 mt-2 leading-snug">活動頁重複開發，IT 排程吃緊</p>
+            </div>
+            <div class="p-4 rounded-lg bg-white fine-border">
+              <div class="text-[10px] font-mono text-primaryDark/50 uppercase tracking-wider mb-2">核心解法</div>
+              <div class="text-base font-bold text-primaryDark leading-snug">後台可複用<br>「綁定 Banner 模組」</div>
+              <p class="text-xs text-primaryDark/60 mt-2 leading-snug">一次開發，多次複用</p>
+            </div>
+            <div class="p-4 rounded-lg bg-accentBlue/5 border border-accentBlue/30">
+              <div class="text-[10px] font-mono text-accentBlue uppercase tracking-wider mb-2">最終效益</div>
+              <div class="flex items-baseline gap-1.5"><span class="text-2xl font-black text-accentBlue leading-none">2 天</span><span class="text-xs font-bold text-accentBlue">▼ 80%</span></div>
+              <p class="text-xs text-primaryDark/60 mt-2 leading-snug">行銷自助換素材，免佔 IT 寫 code</p>
+            </div>
+          </div>
+          <p class="text-sm font-mono text-primaryDark/70 pl-4 border-l-2 border-highlightNeon">
+            <strong class="text-accentBlue">PM Thinking:</strong> 短期慢，換長期快。內部工具的投資報酬率，要用「之後每一次」來算。
+          </p>
+        </div>
+      </div>
+
+      <div class="w-full h-px bg-gradient-to-r from-transparent via-neutralGray to-transparent"></div>
+
+      <!-- Decision 02 -->
+      <div class="flex flex-col md:flex-row gap-6 md:gap-12 relative group">
+        <div class="hidden md:block absolute left-[-16px] top-0 bottom-0 w-1 bg-transparent group-hover:bg-accentBlue transition-colors duration-300"></div>
+        <div class="md:w-1/3 shrink-0">
+          <span class="text-xs font-mono text-accentBlue font-bold tracking-widest mb-1 block uppercase">Decision 02</span>
+          <h3 class="text-2xl font-black text-primaryDark leading-tight">誘因不是折扣，<br class="hidden md:block">是痛點</h3>
+          <p class="text-xs text-primaryDark/50 font-mono mt-2">（剛需即 Hook）</p>
+        </div>
+        <div class="md:w-2/3">
+          <div class="space-y-3 mb-6">
+            <p class="text-base md:text-lg text-primaryDark/80 leading-relaxed"><span class="inline-block font-mono text-[11px] text-accentBlue font-bold mr-2 px-1.5 py-0.5 rounded bg-accentBlue/5 border border-accentBlue/20">用戶洞察</span>65% 客服詢問集中在「物流出貨」與「點數進帳」。</p>
+            <p class="text-base md:text-lg text-primaryDark/80 leading-relaxed"><span class="inline-block font-mono text-[11px] text-accentBlue font-bold mr-2 px-1.5 py-0.5 rounded bg-accentBlue/5 border border-accentBlue/20">核心策略</span>放棄折扣券，改為<strong>綁定後才解鎖</strong>「即時物流」與「點數查詢」。</p>
+          </div>
+
+          <!-- RICH MENU DIAGRAM (enlarged, visual focus) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div class="p-5 rounded-lg bg-canvas fine-border relative overflow-hidden">
+              <span class="text-[11px] font-mono text-primaryDark/70 absolute top-3 right-3 px-2 py-0.5 rounded border border-neutralGray bg-white">未綁定</span>
+              <div class="flex justify-between items-center gap-2 mt-6">
+                <div class="h-14 flex-1 bg-white fine-border rounded-lg flex flex-col items-center justify-center gap-1 opacity-50"><span class="text-[11px] text-primaryDark/50">折扣</span></div>
+                <div class="h-14 flex-1 bg-white fine-border rounded-lg flex flex-col items-center justify-center gap-1"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg><span class="text-[11px] text-primaryDark/70">物流</span></div>
+                <div class="h-14 flex-1 bg-white fine-border rounded-lg flex flex-col items-center justify-center gap-1"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg><span class="text-[11px] text-primaryDark/70">點數</span></div>
+              </div>
+            </div>
+            <div class="p-5 rounded-lg bg-white border border-accentBlue/30 shadow-sm relative overflow-hidden">
+              <span class="text-[11px] font-mono text-accentBlue absolute top-3 right-3 px-2 py-0.5 rounded border border-accentBlue/20 bg-accentBlue/5">綁定後</span>
+              <div class="flex justify-between items-center gap-2 mt-6">
+                <div class="h-14 flex-1 bg-canvas fine-border rounded-lg flex flex-col items-center justify-center gap-1 opacity-50"><span class="text-[11px] text-primaryDark/50">折扣</span></div>
+                <div class="h-14 flex-1 bg-highlightNeon/40 border border-accentBlue/30 rounded-lg flex flex-col items-center justify-center gap-1"><svg class="w-4 h-4 text-accentBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-[11px] text-accentBlue font-bold">物流</span></div>
+                <div class="h-14 flex-1 bg-highlightNeon/40 border border-accentBlue/30 rounded-lg flex flex-col items-center justify-center gap-1"><svg class="w-4 h-4 text-accentBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-[11px] text-accentBlue font-bold">點數</span></div>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-sm font-mono text-primaryDark/70 pl-4 border-l-2 border-highlightNeon">
+            <strong class="text-accentBlue">PM Thinking:</strong> 最好的誘因不用花預算買，它已經在用戶的抱怨裡了。綁定從「配合行銷」變成「對用戶自己有用」。
+          </p>
+        </div>
+      </div>
+
+      <div class="w-full h-px bg-gradient-to-r from-transparent via-neutralGray to-transparent"></div>
+
+      <!-- Decision 03 -->
+      <div class="flex flex-col md:flex-row gap-6 md:gap-12 relative group">
+        <div class="hidden md:block absolute left-[-16px] top-0 bottom-0 w-1 bg-transparent group-hover:bg-accentBlue transition-colors duration-300"></div>
+        <div class="md:w-1/3 shrink-0">
+          <span class="text-xs font-mono text-accentBlue font-bold tracking-widest mb-1 block uppercase">Decision 03</span>
+          <h3 class="text-2xl font-black text-primaryDark leading-tight">不求一次到位</h3>
+          <p class="text-xs text-primaryDark/50 font-mono mt-2">（MVP 漸進式交付）</p>
+        </div>
+        <div class="md:w-2/3">
+          <div class="space-y-3 mb-6">
+            <p class="text-base md:text-lg text-primaryDark/80 leading-relaxed"><span class="inline-block font-mono text-[11px] text-accentBlue font-bold mr-2 px-1.5 py-0.5 rounded bg-accentBlue/5 border border-accentBlue/20">限制挑戰</span>421 上線死線臨頭，PXPay／MAAC／LINE 三方 API 串接不及。</p>
+            <p class="text-base md:text-lg text-primaryDark/80 leading-relaxed"><span class="inline-block font-mono text-[11px] text-accentBlue font-bold mr-2 px-1.5 py-0.5 rounded bg-accentBlue/5 border border-accentBlue/20">MVP 策略</span>拆成三階段<strong>漸進式交付</strong>，先低成本驗證方向，再投入高階技術資源。</p>
+          </div>
+
+          <!-- PHASE TIMELINE -->
+          <div class="flex flex-col sm:flex-row items-stretch gap-2 mb-6">
+            <div class="flex-1 p-3 rounded-lg bg-canvas fine-border text-center flex flex-col justify-center">
+              <div class="text-[10px] font-mono text-primaryDark/50 mb-1">PHASE 1</div>
+              <div class="text-sm font-bold text-primaryDark">建立渠道・快速擴粉</div>
+            </div>
+            <div class="flex items-center justify-center text-accentBlue/40 rotate-90 sm:rotate-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></div>
+            <div class="flex-1 p-3 rounded-lg bg-accentBlue/5 border border-accentBlue/30 text-center flex flex-col justify-center">
+              <div class="text-[10px] font-mono text-accentBlue mb-1">PHASE 2 · 421 檔期</div>
+              <div class="text-sm font-bold text-primaryDark">Banner 教學引導上線</div>
+              <div class="text-[11px] text-primaryDark/60 mt-1 leading-snug">低成本驗證「不重新註冊」方向</div>
+            </div>
+            <div class="flex items-center justify-center text-accentBlue/40 rotate-90 sm:rotate-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></div>
+            <div class="flex-1 p-3 rounded-lg bg-canvas fine-border text-center flex flex-col justify-center">
+              <div class="text-[10px] font-mono text-primaryDark/50 mb-1">PHASE 3 · 整合期</div>
+              <div class="text-sm font-bold text-primaryDark">One-Click API 背景綁定</div>
+            </div>
+          </div>
+
+          <p class="text-sm font-mono text-primaryDark/70 pl-4 border-l-2 border-highlightNeon">
+            <strong class="text-accentBlue">PM Thinking:</strong> 先用低成本證明需求存在，再投資做順滑的版本。順序反過來，是拿工程資源賭一個未經質性驗證的假設。
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGY & MARKETING IMPLEMENTATION -->
+<section class="py-20 border-b border-neutralGray bg-canvas">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+
+      <!-- LEFT: heading -->
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-xs font-mono text-primaryDark/60 uppercase">05</span>
+          <div class="h-[1px] w-8 bg-neutralGray"></div>
+          <span class="text-xs font-mono text-accentBlue">Cross-Functional Alignment</span>
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold font-mono text-primaryDark mb-4 leading-snug">跨部門溝通的語言：用 Q1 成果贏得 IT 與團隊信任</h2>
+        <p class="text-base md:text-lg text-primaryDark/70 leading-relaxed">
+          透過 Q1 實戰數據與 Persona × Lifestyle 以人為本的行銷策略，向跨部門夥伴證明基建價值，建立溝通共識。
+        </p>
+      </div>
+
+      <!-- RIGHT: Google Slides Embed Window -->
+      <div class="relative w-full rounded-xl overflow-hidden border border-neutralGray bg-white shadow-lg">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-neutralGray bg-canvas">
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 rounded-full bg-primaryDark/30"></div>
+            <div class="w-3 h-3 rounded-full bg-primaryDark/30"></div>
+            <div class="w-3 h-3 rounded-full bg-primaryDark/30"></div>
+            <span class="text-xs font-mono text-primaryDark/70 ml-2">LINE OA Q1 成效與策略簡報.pdf</span>
+          </div>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-accentBlue/10 text-accentBlue border border-accentBlue/20">📄 跨部門溝通簡報實錄</span>
+        </div>
+        <div class="relative" style="padding-top: 56.25%;">
+          <iframe 
+            src="https://docs.google.com/presentation/d/14ruSlNerIcs262uIKj_pjj3zOSi3evFrqRcK4h1nyaI/embed?start=false&loop=false&delayms=3000" 
+            frameborder="0" 
+            width="100%" 
+            height="100%" 
+            allowfullscreen="true" 
+            mozallowfullscreen="true" 
+            webkitallowfullscreen="true"
+            class="absolute top-0 left-0 w-full h-full border-0">
+          </iframe>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- EXECUTION & DIAGRAM 3 -->
+<section class="py-20 border-b border-neutralGray">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-xs font-mono text-primaryDark/60 uppercase">06</span>
+      <div class="h-[1px] w-8 bg-neutralGray"></div>
+      <span class="text-xs font-mono text-accentBlue">Execution</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl font-bold font-mono text-primaryDark mb-8">How do you move people who don't have to believe you?</h2>
+
+    <div class="text-primaryDark/90 space-y-6 leading-relaxed mb-12 text-base md:text-lg max-w-4xl">
+      <p>
+        方向對了，還要讓一群沒有義務相信你的人一起往前跑。當時 IT 團隊正在全力推進跨集團的「超商取貨」特大號專案。我知道我無法、也不應去硬搶一線技術資源，於是我發揮技術共情能力，採取了以下行動：
+      </p>
+    </div>
+
+    <!-- DIAGRAM 3: SYSTEM ARCHITECTURE -->
+    <div class="p-6 md:p-8 rounded-xl bg-white fine-border mb-12">
+      <h3 class="text-lg font-bold text-primaryDark mb-2">技術實現：跨系統數據閉環架構</h3>
+      <p class="text-xs text-primaryDark/60 mb-8">展示 PXPay、LINE 官方帳號與 MAAC 自動資料 Mapping 之後端技術拓撲。</p>
+
+      <div class="flex flex-col md:flex-row items-stretch justify-between gap-6 relative">
+        <div class="flex-1 p-4 rounded-lg bg-canvas fine-border flex flex-col justify-between">
+          <div>
+            <div class="text-[10px] text-accentBlue font-mono mb-1">DATA OWNER 01</div>
+            <div class="text-sm font-bold text-primaryDark mb-2">全聯 App (PXPay)</div>
+            <div class="px-2 py-1 bg-white fine-border text-primaryDark/70 rounded text-[10px] font-mono inline-block mb-3">
+              Hold: MID (Member ID)
+            </div>
+          </div>
+          <p class="text-[11px] text-primaryDark/70 leading-relaxed">
+            用戶在 App 內點擊 Banner 發起導流，背景帶出經過 OAuth 簽章的 MID 會員憑證。
+          </p>
+        </div>
+
+        <div class="flex items-center justify-center text-primaryDark/50">
+          <svg class="w-6 h-6 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+
+        <div class="flex-1 p-4 rounded-lg bg-canvas fine-border flex flex-col justify-between">
+          <div>
+            <div class="text-[10px] text-accentBlue font-mono mb-1">DATA OWNER 02</div>
+            <div class="text-sm font-bold text-primaryDark mb-2">LINE Official Account</div>
+            <div class="px-2 py-1 bg-white fine-border text-primaryDark/70 rounded text-[10px] font-mono inline-block mb-3">
+              Hold: LID (LINE User ID)
+            </div>
+          </div>
+          <p class="text-[11px] text-primaryDark/70 leading-relaxed">
+            LINE 後台偵測用戶進入，自動回傳 LID 識別碼，透過 Webhook API 傳遞至 MAAC。
+          </p>
+        </div>
+
+        <div class="flex items-center justify-center text-primaryDark/50">
+          <svg class="w-6 h-6 rotate-90 md:rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+
+        <div class="flex-1 p-4 rounded-lg bg-highlightNeon/40 border border-accentBlue/30 flex flex-col justify-between relative shadow-sm">
+          <div>
+            <div class="text-[10px] text-primaryDark/70 font-mono mb-1">INTEGRATOR</div>
+            <div class="text-sm font-bold text-primaryDark mb-2">MAAC 數據中樞</div>
+            <div class="px-2 py-1 bg-white border border-accentBlue/20 text-accentBlue rounded text-[10px] font-mono inline-block mb-3">
+              API Mapping: MID ⇄ LID
+            </div>
+          </div>
+          <p class="text-[11px] text-primaryDark/70 leading-relaxed">
+            系統背景自動比對並對齊 MID 與 LID，不需用戶手動重填任何表單，秒級完成數據閉環。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXECUTION THREE PILLARS -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-xl bg-white fine-border">
+        <h3 class="text-lg font-bold text-accentBlue mb-2">01. 對 IT 展現共情</h3>
+        <p class="text-sm text-primaryDark/70 leading-relaxed">
+          理解排程卡點，將大需求拆碎成漸進式 Redmine 工作項目，讓工程師有餘裕，不硬搶一線資源。
+        </p>
+      </div>
+      <div class="p-6 rounded-xl bg-white fine-border">
+        <h3 class="text-lg font-bold text-accentBlue mb-2">02. 設計溝通降維</h3>
+        <p class="text-sm text-primaryDark/70 leading-relaxed">
+          不丟複雜死板的規格書，直接手繪情境 <strong>Wireframe 草稿</strong>，讓不具行銷背景的開發者一秒共情。
+        </p>
+      </div>
+      <div class="p-6 rounded-xl bg-white fine-border">
+        <h3 class="text-lg font-bold text-accentBlue mb-2">03. 對主管結果扛責</h3>
+        <p class="text-sm text-primaryDark/70 leading-relaxed">
+          主動承諾用 Q1 實質營收與數據轉化率驗證這個方向，用客觀成果換取放手做的空間。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT CHANGED -->
+<section class="py-20 border-b border-neutralGray bg-white/40">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="text-xs font-mono text-primaryDark/60 uppercase">07</span>
+      <div class="h-[1px] w-8 bg-neutralGray"></div>
+      <span class="text-xs font-mono text-accentBlue">What Changed</span>
+    </div>
+    <h2 class="text-2xl md:text-3xl font-bold font-mono text-primaryDark mb-10">How do you know it wasn't just luck?</h2>
+
+    <!-- BIG METRIC SECTION -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div class="p-6 rounded-xl bg-white fine-border">
+        <div class="text-xs font-mono text-primaryDark/60 mb-2">好友綁定率</div>
+        <div class="flex items-baseline gap-2">
+          <span class="text-primaryDark/50 line-through text-lg font-bold">13%</span>
+          <span class="text-4xl font-black text-accentBlue">→ 42%</span>
+        </div>
+        <div class="text-[10px] text-primaryDark/50 mt-2 font-mono">歷時 4 個月路徑優化</div>
+      </div>
+      <div class="p-6 rounded-xl bg-white fine-border">
+        <div class="text-xs font-mono text-primaryDark/60 mb-2">LINE 渠道月營收</div>
+        <div class="flex items-baseline gap-2">
+          <span class="text-primaryDark/50 line-through text-lg font-bold">360 萬</span>
+          <span class="text-4xl font-black text-accentBlue">→ 3,000 萬</span>
+        </div>
+        <div class="text-[10px] text-primaryDark/50 mt-2 font-mono">營收規模化大幅成長</div>
+      </div>
+      <div class="p-6 rounded-xl bg-white fine-border">
+        <div class="text-xs font-mono text-primaryDark/60 mb-2">LINE 渠道營收佔比</div>
+        <div class="flex items-baseline gap-2">
+          <span class="text-primaryDark/50 line-through text-lg font-bold">1.2%</span>
+          <span class="text-4xl font-black text-accentBlue">→ 7.6%</span>
+        </div>
+        <div class="text-[10px] text-primaryDark/50 mt-2 font-mono">轉型為高轉換核心渠道</div>
+      </div>
+    </div>
+
+
+    <!-- DATA VISUALS (real figures pulled from the live dashboard) -->
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+      <div class="p-6 rounded-xl bg-white fine-border">
+        <div class="text-lg font-bold text-primaryDark mb-1">綁定率趨勢</div>
+        <div class="text-xs text-primaryDark/50 font-mono mb-4">綁定數 ÷ 好友總數（%）</div>
+        <div class="relative h-[220px]"><canvas id="pxChartRate"></canvas></div>
+      </div>
+      <div class="p-6 rounded-xl bg-white fine-border">
+        <div class="text-lg font-bold text-primaryDark mb-1">好友數 vs 綁定數</div>
+        <div class="text-xs text-primaryDark/50 font-mono mb-4">累積趨勢（Jan – May '26）</div>
+        <div class="relative h-[220px]"><canvas id="pxChartFriends"></canvas></div>
+      </div>
+    </div>
+
+    <!-- CTA -> full interactive dashboard -->
+    <a href="dashboard.html" target="_blank" rel="noopener" class="group mt-6 block rounded-xl bg-primaryDark text-white p-6 md:p-8 hover:bg-[#2c2329] transition-colors">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <div class="text-[11px] font-mono tracking-widest text-accentBlue uppercase mb-2">Interactive Artifact</div>
+          <div class="text-xl md:text-2xl font-bold mb-2">探索完整的 LINE OA 數據儀表板</div>
+          <div class="text-sm text-white/60">總覽 · 月度趨勢 · 活動成效 · 綁定分析　—　我為這個專案實際搭建的分析工具</div>
+        </div>
+        <div class="w-12 h-12 shrink-0 rounded-full bg-accentBlue flex items-center justify-center group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <script>
+    (function(){
+      function draw(){
+        if (typeof Chart === 'undefined') { return setTimeout(draw, 120); }
+        var months = ["Jan '26","Feb '26","Mar '26","Apr '26","May '26"];
+        var rate = [13.4,19.0,24.1,32.2,41.7];
+        var friends = [62438,104148,111761,124198,140982];
+        var bound = [8343,19821,26912,39941,58799];
+        var BLUE='#2961D9', DARK='#372C32', GRID='#E8ECEA', FRIEND='#A9C3F5';
+        if (Chart.defaults && Chart.defaults.font) Chart.defaults.font.family = "'Plus Jakarta Sans','Noto Sans TC',sans-serif";
+        new Chart(document.getElementById('pxChartRate'), {
+          type:'line',
+          data:{labels:months, datasets:[{data:rate, borderColor:BLUE, backgroundColor:'rgba(41,97,217,0.08)', fill:true, tension:0.35, pointBackgroundColor:BLUE, pointRadius:4, borderWidth:2.5}]},
+          options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{callback:function(v){return v+'%';}}, grid:{color:GRID}}, x:{grid:{display:false}}}}
+        });
+        new Chart(document.getElementById('pxChartFriends'), {
+          type:'bar',
+          data:{labels:months, datasets:[{label:'好友總數', data:friends, backgroundColor:FRIEND, borderRadius:4},{label:'綁定數', data:bound, backgroundColor:DARK, borderRadius:4}]},
+          options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}}, scales:{y:{beginAtZero:true, ticks:{callback:function(v){return (v/1000)+'K';}}, grid:{color:GRID}}, x:{grid:{display:false}}}}
+        });
+      }
+      draw();
+    })();
+    </script>
+  </div>
+</section>
+
+<!-- IN MY VIEW -->
+<section id="in-my-view" class="py-24 relative bg-canvas">
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <div class="flex items-center gap-3 mb-8">
+      <span class="text-xs font-mono text-primaryDark/60 uppercase">08</span>
+      <div class="h-[1px] w-8 bg-neutralGray"></div>
+      <span class="text-xs font-mono text-accentBlue uppercase font-bold">In My View</span>
+    </div>
+
+    <div class="mb-12">
+      <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold font-mono text-primaryDark mb-4 leading-snug">
+        In My View：在複雜實務推進中驗證的產品實力
+      </h2>
+      <p class="text-base md:text-lg text-primaryDark/70 leading-relaxed max-w-2xl">
+        本專案並非紙上談兵，而是克服了既有組織技術債與開發死線，在資源極度受限的環境下完成數據閉環落地的最佳實務。
+      </p>
+    </div>
+
+    <!-- Pitch Deck 3 Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      <div class="p-6 rounded-xl bg-white fine-border flex flex-col justify-between focus-glow transition-all">
+        <div>
+          <span class="text-[10px] font-mono px-2 py-1 rounded bg-highlightNeon text-primaryDark font-bold mb-4 inline-block">01. PRODUCT SENSE</span>
+          <h3 class="text-xl md:text-2xl font-black text-primaryDark mb-4 leading-snug">產品敏銳度 ｜ <br>挑戰既有前提</h3>
+        </div>
+        <p class="text-base md:text-lg text-primaryDark/80 leading-relaxed font-medium">
+          打破局部優化迷思，從現場與數據洞察出真問題，翻轉戰略漏斗。
+        </p>
+      </div>
+
+      <div class="p-6 rounded-xl bg-white fine-border flex flex-col justify-between focus-glow transition-all">
+        <div>
+          <span class="text-[10px] font-mono px-2 py-1 rounded bg-highlightNeon text-primaryDark font-bold mb-4 inline-block">02. TEAM INTEGRATION</span>
+          <h3 class="text-xl md:text-2xl font-black text-primaryDark mb-4 leading-snug">跨職能整合 ｜ <br>技術共情溝通</h3>
+        </div>
+        <p class="text-base md:text-lg text-primaryDark/80 leading-relaxed font-medium">
+          在 IT 排程最滿載的卡點下，手繪 Wireframe 降維溝通、拆碎 MVP 漸進交付。
+        </p>
+      </div>
+
+      <div class="p-6 rounded-xl bg-white fine-border flex flex-col justify-between focus-glow transition-all">
+        <div>
+          <span class="text-[10px] font-mono px-2 py-1 rounded bg-highlightNeon text-primaryDark font-bold mb-4 inline-block">03. PO RESPONSIBILITY</span>
+          <h3 class="text-xl md:text-2xl font-black text-primaryDark mb-4 leading-snug">身為 PO 的職責 ｜ <br>對數據與信任負責</h3>
+        </div>
+        <p class="text-base md:text-lg text-primaryDark/80 leading-relaxed font-medium">
+          前期老老實實跑活動、理數據、拆 Redmine 單，用誠實累積跨部門信任。
+        </p>
+      </div>
+    </div>
+
+    <!-- Ultimate Value Proposition -->
+    <div class="pt-16 border-t border-neutralGray text-center space-y-6">
+      <span class="inline-block px-3 py-1 rounded bg-accentBlue/10 text-accentBlue font-mono text-xs font-bold uppercase tracking-wider">
+        My Core Value Proposition
+      </span>
+      <h3 class="text-2xl md:text-3xl lg:text-4xl font-black text-primaryDark tracking-tight leading-snug max-w-4xl mx-auto">
+        以使用者為中心出發，用數據驗證潛在需求，進而達成極大化的<span class="text-accentBlue">商業目標</span>。
+      </h3>
+      <div class="h-[1px] w-12 bg-neutralGray mx-auto"></div>
+      <p class="text-base md:text-lg text-primaryDark/70 leading-relaxed max-w-2xl mx-auto">
+        這是我從設計思考走向數據驅動產品優化的跨領域經驗，也是我持續為團隊、用戶及商業利益創造多贏體驗的終極核心。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-12 border-t border-neutralGray bg-white">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="text-sm font-bold text-primaryDark">Silvia Yang — Portfolio 2026</div>
+    <div class="flex items-center gap-6 text-xs text-primaryDark/60 font-mono">
+      <a href="mailto:sy.peix@gmail.com" class="hover:text-accentBlue transition-colors">sy.peix@gmail.com</a>
+      <span>·</span>
+      <span>0937 180 668</span>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>
