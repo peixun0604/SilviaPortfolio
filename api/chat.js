@@ -90,17 +90,39 @@ export default async function handler(req, res) {
       contents: [{ role: "user", parts: [{ text: prompt }] }],
     };
 
-    const geminiRes = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    // ⏱️ 逾時保護：避免呼叫 Gemini 卡住而讓整支函式傻等到 300 秒。
+    // 15 秒內沒回應就中斷，並在 catch 區把真正的錯誤印進 Logs / 回給前端。
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
 
-    const data = await geminiRes.json();
+    let geminiRes;
+    try {
+      geminiRes = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    const raw = await geminiRes.text();
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch (_) {
+      data = { rawText: raw };
+    }
 
     if (!geminiRes.ok) {
-      console.error("Gemini API error:", data);
-      return res.status(502).json({ error: "Gemini 回傳錯誤" });
+      // 把 Gemini 的真實狀態與訊息印進 Vercel Logs，並回傳給前端方便診斷
+      console.error("Gemini API error:", geminiRes.status, raw?.slice?.(0, 800));
+      return res.status(502).json({
+        error: "Gemini 回傳錯誤",
+        geminiStatus: geminiRes.status,
+        geminiMessage: data?.error?.message || raw?.slice?.(0, 300) || "(no body)",
+      });
     }
 
     const reply =
@@ -109,7 +131,14 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ reply });
   } catch (error) {
-    console.error("Proxy error:", error);
-    return res.status(500).json({ error: "伺服器發生錯誤" });
+    // 逾時（AbortError）或其他例外都會走到這裡，並把真正原因印出來
+    console.error("Proxy error:", error?.name, error?.message);
+    const isTimeout = error?.name === "AbortError";
+    return res.status(isTimeout ? 504 : 500).json({
+      error: isTimeout
+        ? "呼叫 AI 逾時（15 秒內沒有回應）"
+        : "伺服器發生錯誤",
+      detail: `${error?.name || "Error"}: ${error?.message || ""}`.slice(0, 300),
+    });
   }
 }
