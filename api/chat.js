@@ -129,8 +129,7 @@ export default async function handler(req, res) {
       data?.candidates?.[0]?.content?.parts?.[0]?.text ??
       "不好意思，我暫時想不到怎麼回答，稍後再問我一次好嗎？🙏";
 
-    // 🔍 診斷用：把 Gemini 原始回應一起吐出來（確認為何取不到文字）。診斷完會移除。
-    return res.status(200).json({ reply, _debug: data });
+    return res.status(200).json({ reply });
   } catch (error) {
     // 逾時（AbortError）或其他例外都會走到這裡，並把真正原因印出來
     console.error("Proxy error:", error?.name, error?.message);
