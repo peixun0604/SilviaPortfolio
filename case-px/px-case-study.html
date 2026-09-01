@@ -963,17 +963,17 @@
       <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; letter-spacing:0.08em; color:#6B7078; margin-bottom:18px">REFLECTION</div>
       <h2 data-h2="" style="font-size:38px; font-weight:800; line-height:1.4; letter-spacing:-0.025em; margin:0 0 32px; text-wrap:pretty">從放大產品價值，到參與創造產品價值</h2>
 
-      <div style="display:grid; grid-template-columns:minmax(0,1fr); gap:44px; align-items:start">
+      <div class="rf-grid" style="display:grid; grid-template-columns:minmax(0,1fr); gap:44px; align-items:center">
         <!-- Reflection copy -->
-        <div style="max-width:760px; font-size:17px; font-weight:500; line-height:1.95; color:#33383F; text-wrap:pretty">
+        <div class="rf-copy" style="max-width:760px; font-size:17px; font-weight:500; line-height:1.95; color:#33383F; text-wrap:pretty">
           <p style="margin:0 0 20px">綁定率不只是一項成長指標，它反映的是產品能否辨識會員、串接資料，並支撐後續經營。若底層機制沒有打通，再多曝光與誘因，也只能改善一時的數字。</p>
           <p style="margin:0 0 20px">因此，我從數據中找出會員辨識的斷點，重新定義產品入口，將「提升綁定率」拆解為 User Flow、會員狀態、系統規則、後台需求與 UAT，並協調 PXPay、IT PM 與 MAAC 對齊彼此的依賴與交付。這段過程讓我確認，自己能在使用者需求、商業目標、數據證據與技術限制之間做出判斷，將模糊問題推進為可落地的解法。</p>
           <p style="margin:0; font-weight:700; color:#1F1F1F">我不只想在產品完成後放大它的價值，更想參與決定該解決什麼問題、為什麼值得做，並與團隊一起激盪、取捨與驗證，找出真正有效的產品解法。這也是我想走向 Product Manager 的原因。</p>
         </div>
 
         <!-- CSS/SVG diagram: FROM AMPLIFYING VALUE TO BUILDING IT -->
-        <figure style="margin:12px 0 0; padding:0">
-          <div style="border:1px solid rgba(58,119,180,0.14); background:#FAFCFE; padding:clamp(24px,4vw,44px); border-radius:2px">
+        <figure class="rf-figure" style="margin:0; padding:0">
+          <div style="padding:0">
 
             <div style="font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(20px,3.4vw,30px); font-weight:800; line-height:1.15; letter-spacing:-0.02em; color:#1F1F1F; margin-bottom:8px">
               FROM AMPLIFYING<br>VALUE TO BUILDING IT
@@ -1029,7 +1029,9 @@
       #reflection .rf-blob-2{border-radius:58% 46% 56% 46% / 54% 58% 42% 48%}
       #reflection .rf-blob-3{border-radius:56% 48% 54% 48% / 52% 56% 44% 50%}
       @media (min-width:900px){
-        #reflection [data-wrap] > div[style*="grid-template-columns"]{grid-template-columns:1fr 1fr; gap:56px}
+        #reflection .rf-grid{grid-template-columns:1.05fr 0.95fr !important; gap:60px}
+        #reflection .rf-figure{order:1}
+        #reflection .rf-copy{order:2}
       }
       @media (max-width:560px){
         /* narrow screens: the converging blobs already convey "moving upstream" — hide the pill to avoid overlap */
