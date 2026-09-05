@@ -83,7 +83,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "伺服器尚未設定 GEMINI_API_KEY" });
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
     const payload = {
       system_instruction: { parts: [{ text: systemPrompt }] },
@@ -93,7 +93,7 @@ export default async function handler(req, res) {
     // ⏱️ 逾時保護：避免呼叫 Gemini 卡住而讓整支函式傻等到 300 秒。
     // 15 秒內沒回應就中斷，並在 catch 區把真正的錯誤印進 Logs / 回給前端。
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
+    const timeout = setTimeout(() => controller.abort(), 25000);
 
     let geminiRes;
     try {
