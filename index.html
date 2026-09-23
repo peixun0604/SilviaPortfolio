@@ -543,7 +543,9 @@ const CHAT_BTNS = [
 ];
 
 const PROXY_URL = 'https://silvia-portfolio-eight.vercel.app/api/chat';
-const FALLBACK_REPLY = '這題可能交給 Silvia 本人回答最準 🙂\n👉 sy.peix@gmail.com';
+const FALLBACK_REPLY = 'AI 分身暫時連不上線 🙏 請稍後再試一次，\n或直接寫信給 Silvia 👉 sy.peix@gmail.com';
+const RATE_LIMIT_REPLY = '問得有點快，讓我喘口氣 ☕️ 稍等一分鐘再問我吧！';
+const TOO_LONG_REPLY = '這題有點長，可以精簡到 300 字以內再問我一次嗎？';
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -1074,12 +1076,21 @@ class Component extends DCLogic {
   aiAnswer(q) {
     return async () => {
       try {
-        const res = await fetch(PROXY_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: q }),
-        });
-        const data = await res.json();
+        // 前端最多等 35 秒（後端備援最長約 27 秒），避免訪客永遠卡在「...」
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 35000);
+        let res;
+        try {
+          res = await fetch(PROXY_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: q }),
+            signal: ctrl.signal,
+          });
+        } finally { clearTimeout(timer); }
+        if (res.status === 429) return RATE_LIMIT_REPLY;
+        if (res.status === 413) return TOO_LONG_REPLY;
+        const data = await res.json().catch(() => ({}));
         if (!res.ok) return FALLBACK_REPLY;
         return (data.reply || '').trim() || FALLBACK_REPLY;
       } catch (e) { return FALLBACK_REPLY; }
