@@ -157,6 +157,11 @@ export default async function handler(req, res) {
     if (!r.ok && r.status === 400 && /thinking/i.test(r.message || "")) {
       r = await callGemini(model, API_KEY, prompt, PER_MODEL_TIMEOUT[i], false);
     }
+    // 503 = Google 暫時塞車（通常幾秒就好）：等 1 秒，同一個模型再試一次
+    if (!r.ok && r.status === 503) {
+      await new Promise((ok) => setTimeout(ok, 1000));
+      r = await callGemini(model, API_KEY, prompt, Math.min(PER_MODEL_TIMEOUT[i], 7000), true);
+    }
     if (r.ok) {
       return res.status(200).json({ reply: r.text, model });
     }
